@@ -23,7 +23,7 @@ public class MailUtil {
         props.put("mail.smtp.port", mybundle.getString("mail.port"));
 
         Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
+                new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(mybundle.getString("mail.email"), mybundle.getString("mail.password"));
                     }
