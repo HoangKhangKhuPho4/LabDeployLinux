@@ -116,8 +116,14 @@
                                       var="formattedPrice"/>
                     <td> <strong> ${formattedPrice} VND</strong> </td>
                     <td data-th="Quantity">
-                        <b> <%= cartProduct.getQuantity() %> </b>
+                        <div class="input-group quantity-control">
+                            <button class="btn btn-outline-secondary decrease-qty" data-id="<%= cartProduct.getProduct().getId() %>">-</button>
+                            <input type="text" class="form-control text-center quantity-input" data-id="<%= cartProduct.getProduct().getId() %>"
+                                   value="<%= cartProduct.getQuantity() %>" min="1">
+                            <button class="btn btn-outline-secondary increase-qty" data-id="<%= cartProduct.getProduct().getId() %>">+</button>
+                        </div>
                     </td>
+
 
                     <fmt:formatNumber value="<%=cartProduct.getProduct().getPrice()*cartProduct.getQuantity()%>" type="number" pattern="#,##0"
                                       var="formattedPrice1"/>
@@ -187,12 +193,55 @@
 <jsp:include page="footer.jsp"/>
 <!-- /FOOTER -->
 <!-- jQuery Plugins -->
+
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/slick.min.js"></script>
 <script src="js/nouislider.min.js"></script>
 <script src="js/jquery.zoom.min.js"></script>
 <script src="js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".increase-qty, .decrease-qty").click(function () {
+            let productId = $(this).data("id");
+            let inputField = $(".quantity-input[data-id='" + productId + "']");
+            let currentQty = parseInt(inputField.val());
+            let newQty = $(this).hasClass("increase-qty") ? currentQty + 1 : currentQty - 1;
+
+            if (newQty < 1) return;
+
+            updateCartQuantity(productId, newQty);
+        });
+
+        $(".quantity-input").change(function () {
+            let productId = $(this).data("id");
+            let newQty = parseInt($(this).val());
+
+            if (isNaN(newQty) || newQty < 1) {
+                $(this).val(1);
+                newQty = 1;
+            }
+
+            updateCartQuantity(productId, newQty);
+        });
+
+        function updateCartQuantity(productId, quantity) {
+            $.ajax({
+                url: "<%= request.getContextPath() %>/updateCart",
+                type: "POST",
+                data: { productId: productId, quantity: quantity },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi cập nhật số lượng!");
+                }
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

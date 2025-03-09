@@ -38,14 +38,14 @@ public class Cart {
         return new ArrayList<>(data.values());
     }
 
-    public double amount(List<CartProduct> cartProducts){
+    public double amount(List<CartProduct> cartProducts) {
         double result = 0;
-            for (CartProduct cartProduct : cartProducts) {
-                result = cartProduct.getProduct().getPrice() + result;
+        for (CartProduct cartProduct : cartProducts) {
+            result += cartProduct.getProduct().getPrice() * cartProduct.getQuantity();
         }
         return result;
-
     }
+
     public void removeProduct(String productId) {
         // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
         if (data.containsKey(productId)) {
@@ -60,15 +60,22 @@ public class Cart {
                 '}'+"\n";
     }
 
+    public void updateQuantity(String productId, int quantity) {
+        if (data.containsKey(productId)) {
+            data.get(productId).setQuantity(quantity);
+        }
+    }
+
+
+
     public static void main(String[] args) {
         Cart c = new Cart();
         c.add("1");
         c.add("2");
-         List<CartProduct>a = c.getCartProducts();
-        System.out.println(a);
+        List<CartProduct>a = c.getCartProducts();
+        c.updateQuantity("2",4);
         System.out.println(c.amount(a));
-        c.removeProduct("2");
-        System.out.println(c);
+
     }
 }
 
