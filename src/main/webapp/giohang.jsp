@@ -193,6 +193,15 @@
 <jsp:include page="footer.jsp"/>
 <!-- /FOOTER -->
 <!-- jQuery Plugins -->
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.zoom.min.js"></script>
+<script src="js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         $(".increase-qty, .decrease-qty").click(function () {
@@ -201,7 +210,7 @@
             let currentQty = parseInt(inputField.val());
             let newQty = $(this).hasClass("increase-qty") ? currentQty + 1 : currentQty - 1;
 
-            if (newQty < 1) return; // Không cho phép số lượng nhỏ hơn 1
+            if (newQty < 1) return;
 
             updateCartQuantity(productId, newQty);
         });
@@ -220,11 +229,11 @@
 
         function updateCartQuantity(productId, quantity) {
             $.ajax({
-                url: "updateCart", // API để cập nhật giỏ hàng
+                url: "<%= request.getContextPath() %>/updateCart",
                 type: "POST",
                 data: { productId: productId, quantity: quantity },
                 success: function (response) {
-                    location.reload(); // Tải lại trang để cập nhật giá trị mới
+                    location.reload();
                 },
                 error: function () {
                     alert("Có lỗi xảy ra khi cập nhật số lượng!");
@@ -233,13 +242,6 @@
         }
     });
 </script>
-
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/jquery.zoom.min.js"></script>
-<script src="js/main.js"></script>
 
 </body>
 </html>
