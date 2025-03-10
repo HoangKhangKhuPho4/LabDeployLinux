@@ -17,4 +17,8 @@ public interface IUserService {
     void deleteById(String id);
     void update(User user);
     void add(User user, String role);
+
+    void addGoogleUser(User newUser);
+
+    String createId();
 }
