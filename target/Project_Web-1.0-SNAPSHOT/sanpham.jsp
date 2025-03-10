@@ -135,11 +135,11 @@
                     <ul style="list-style-type: disc">
                         <li><%= productDetails.getDescription()%></li>
                     </ul>
-<%--                    <div class="form-group">--%>
-<%--                        <label for="quantity">Số lượng:</label>--%>
-<%--                        <input style="width: 70px" type="number" class="form-control" id="quantity" name="quantity"--%>
-<%--                               min="1" max="100">--%>
-<%--                    </div>--%>
+                    <div class="form-group">
+                        <label for="quantity">Số lượng:</label>
+                        <input style="width: 70px" type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" value="1">  <!-- Đặt value mặc định là 1 -->
+                    </div>
+
                     <br>
                     <div class="add-to-cart">
                         <form action="addcart" method="post">
