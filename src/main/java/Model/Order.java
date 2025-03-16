@@ -10,18 +10,21 @@ public class Order {
     private String payMent;
     private Date orderDate;
     private Date deliveryDate;
+    private double amount;
 
     public Order() {
+        this.status = "Chưa xác thực"; // Thiết lập giá trị mặc định
     }
 
-    public Order(String id, User user, String address, String status, String payMent, Date orderDate, Date deliveryDate) {
+    public Order(String id, User user, String address, String status, String payMent, Date orderDate, Date deliveryDate, double amount) {
         this.id = id;
         this.user = user;
         this.address = address;
-        this.status = status;
+        this.status = status != null ? status : "Chưa xác thực";
         this.payMent = payMent;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
+        this.amount = amount;
     }
 
     public String getId() {
@@ -80,6 +83,19 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -90,7 +106,7 @@ public class Order {
                 ", payMent='" + payMent + '\'' +
                 ", orderDate=" + orderDate +
                 ", deliveryDate=" + deliveryDate +
+                ", amount=" + amount +
                 '}';
     }
-
 }

@@ -11,6 +11,7 @@ import service.IUserService;
 import service.UserService;
 import service.impl.userServiceImpl;
 import Model.*;
+import utils.MailUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -62,12 +63,18 @@ public class OrderController extends HttpServlet {
             String address = request.getParameter("delivery_address");
             String phone = request.getParameter("phone_number");
             String payment_method = request.getParameter("payment");
+            double total_price = 0;
+            if (request.getParameter("total_price") != null) {
+                total_price = Double.parseDouble(request.getParameter("total_price"));
+            }
+            System.out.println("Total Price: " + total_price);
+
 
             if (email != null && !email.isEmpty()) {
                 User user = userDAO.getUserByEmail(email);
                 user.setId(userDAO.getUserByEmail(email).getId());
 
-                Order order = new Order(id_order, user, address, "", payment_method, order_date, delivery_date);
+                Order order = new Order(id_order, user, address, "Chưa xác thực", payment_method, order_date, delivery_date, total_price);
                 orderDAO.insert(order);
 
                 List<CartProduct> cartProducts = cart.getCartProducts();
@@ -90,15 +97,30 @@ public class OrderController extends HttpServlet {
 
                     orderDetailsDAO.insert(orderDetails);
                 }
+
+                String emailContent = "Chào bạn,\n" +
+                        "Đơn hàng của bạn đã được đặt thành công. Chúng tôi sẽ xác nhận đơn hàng và liên hệ với bạn sớm nhất có thể\n" +
+                        "Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi!\n" +
+                        "Địa chỉ: Phone Accessories - Linh Trung - Thủ Đức - Hồ Chí Minh\n" +
+                        "Email: support@phoneaccessories.com | Điện thoại: (0973) 206 403";
+
+                // Gửi email thông báo cho người dùng
+                MailUtil.getInstance().sendMail(emailContent,
+                        "Thông báo thanh toán thành công",
+                        user.getEmail());
+
                 session.removeAttribute("cart");
-            }else{
+                response.sendRedirect("thongtinchitiet.jsp?id=" + userService.getIdByUsername(user.getUser_name()));
+            }else {
                 request.setAttribute("error", "Tên người dùng hoặc email hoặc số điện thoại không chính xác!");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("thanhtoan.jsp");
                 dispatcher.forward(request, response);
             }
         }
         session.setAttribute("OrderSuccess", true);
-        response.sendRedirect("thanhtoan.jsp");
+
+
+
     }
 
     private synchronized String generateUniqueOrderId() {
