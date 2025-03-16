@@ -73,7 +73,7 @@
                     <li><a href="dangnhap.jsp"><i class="fa fa-user-o"></i> Đăng nhập</a></li>
                 </c:if>
                 <c:if test="${sessionScope.user != null}">
-                    <li><a><i class="fa fa-user-o"></i> <%= new userServiceImpl().getById(SessionUtil.getInstance().getKey((HttpServletRequest) request, "user").toString()).getName() %></a></li>
+                    <li><a href="thongtinchitiet.jsp?id=<%= new userServiceImpl().getById(SessionUtil.getInstance().getKey((HttpServletRequest) request, "user").toString()).getId() %>"><i class="fa fa-user-o"></i> <%= new userServiceImpl().getById(SessionUtil.getInstance().getKey((HttpServletRequest) request, "user").toString()).getName() %></a></li>
                     <li><a href="logout"><i class="fa fa-user-o"></i> Đăng xuất</a></li>
                 </c:if>
             </ul>
