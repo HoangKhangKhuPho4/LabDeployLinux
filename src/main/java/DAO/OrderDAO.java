@@ -293,7 +293,7 @@ public class OrderDAO implements DAOInterface<Order> {
        for (Order o : a){
            String u = o.getUser().getId();
        }
-        System.out.println();
+        System.out.println(a);
 
     }
 }
