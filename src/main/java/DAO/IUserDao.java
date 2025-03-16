@@ -18,4 +18,8 @@ public interface IUserDao {
     void deleteById(String id);
     void update(User user);
     void add(User user);
+
+    void addGoogleUser(User user);
+
+    boolean isIdExists(String newId);
 }

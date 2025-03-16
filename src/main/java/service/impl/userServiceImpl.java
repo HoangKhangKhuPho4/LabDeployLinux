@@ -9,6 +9,7 @@ import Model.User;
 import service.IUserService;
 
 import java.util.List;
+import java.util.UUID;
 
 public class userServiceImpl implements IUserService {
     private IUserDao DAO = new userDaoImpl();
@@ -81,11 +82,21 @@ public class userServiceImpl implements IUserService {
         DAO.add(user);
     }
 
-    private String createId(){
-        String idOld = DAO.getIdTop1();
-        if(idOld == null)
-            return "u_1";
-        int idNumber = Integer.parseInt(idOld.substring(2)) + 1;
-        return "u_" + idNumber;
+    @Override
+    public void addGoogleUser(User user) {
+        DAO.addGoogleUser(user);
     }
+
+    public String createId() {
+        // Tạo ID dựa trên UUID
+        String newId = "u_" + UUID.randomUUID().toString();
+
+        if (DAO.isIdExists(newId)) {
+            return createId(); // Gọi lại nếu ID đã tồn tại
+        }
+
+        return newId;
+    }
+
+
 }
