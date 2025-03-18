@@ -6,6 +6,7 @@ import DAO.impl.roleDaoImpl;
 import DAO.impl.userDaoImpl;
 import Model.Role;
 import Model.User;
+import org.mindrot.jbcrypt.BCrypt;
 import service.IUserService;
 
 import java.util.List;
@@ -17,15 +18,28 @@ public class userServiceImpl implements IUserService {
 
     @Override
     public boolean login(String username, String password) {
-        User user = new User();
-        user.setUser_name(username);
-        user.setPassword(password);
-        return DAO.login(user);
+        // Đối với chức năng đăng nhập, cần lấy user từ DB rồi so sánh mật khẩu đã mã hóa
+        User user = DAO.getByUsername(username);
+        if(user == null) {
+            return false;
+        }
+        // Sử dụng BCrypt để so sánh mật khẩu
+        if(BCrypt.checkpw(password, user.getPassword())){
+            return true;
+        }
+        return false;
     }
 
     @Override
     public String register(User user) {
+        // Mã hóa mật khẩu trước khi lưu vào DB
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+        user.setPassword(hashedPassword);
+
+        // Tạo ID cho user
         user.setId(createId());
+
+        // Gọi DAO để thực hiện chèn vào DB
         User userNew = DAO.register(user);
         return userNew == null ? null : userNew.getId();
     }
@@ -57,6 +71,8 @@ public class userServiceImpl implements IUserService {
 
     @Override
     public void resetPass(String email, String password) {
+        // Hash mật khẩu mới trước khi cập nhật
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
         DAO.resetPass(email, password);
     }
 
@@ -72,6 +88,11 @@ public class userServiceImpl implements IUserService {
 
     @Override
     public void update(User user) {
+        // Nếu cập nhật mật khẩu, cần hash lại trước khi update
+        if(user.getPassword() != null && !user.getPassword().isEmpty()){
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+            user.setPassword(hashedPassword);
+        }
         DAO.update(user);
     }
 
