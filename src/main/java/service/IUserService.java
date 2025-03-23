@@ -21,4 +21,5 @@ public interface IUserService {
     void addGoogleUser(User newUser);
 
     String createId();
+    boolean isUserLocked(String username);
 }
