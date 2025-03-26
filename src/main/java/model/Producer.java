@@ -15,4 +15,6 @@ public class Producer {
     private String name;
     private String code;
     private List<Product> products;
+
+
 }

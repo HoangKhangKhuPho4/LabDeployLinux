@@ -1,7 +1,6 @@
 package service;
 
-import Model.User;
-
+import model.User;  // Chuyển về package model (chữ thường)
 import java.util.List;
 
 public interface IUserService {
@@ -10,16 +9,16 @@ public interface IUserService {
     boolean isUsernameExists(String username);
     String getIdByUsername(String username);
     User getByUsername(String username);
-    User getById(String id);
+    User getById(Integer id); // Chỉnh lại theo id kiểu Integer cho phù hợp Model
     boolean isEmailExists(String email);
     void resetPass(String email, String password);
     List<User> findAll();
-    void deleteById(String id);
+    void deleteById(Integer id); // đổi sang Integer cho thống nhất
     void update(User user);
     void add(User user, String role);
 
     void addGoogleUser(User newUser);
 
-    String createId();
+    String createId(); // Có thể bỏ nếu bạn đã dùng auto_increment
     boolean isUserLocked(String username);
 }
