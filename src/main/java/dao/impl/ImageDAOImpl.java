@@ -4,7 +4,6 @@ import dao.IImageDAO;
 import db.JDBIConnector;
 import model.Image;
 
-import java.awt.font.ImageGraphicAttribute;
 import java.util.List;
 
 public class ImageDAOImpl implements IImageDAO {

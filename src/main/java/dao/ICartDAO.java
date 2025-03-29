@@ -2,7 +2,6 @@ package dao;
 
 import model.cart.Cart;
 import model.cart.CartItem;
-import model.Product;
 
 import java.util.List;
 import java.util.Map;

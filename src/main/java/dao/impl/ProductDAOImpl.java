@@ -6,7 +6,7 @@ import model.Product;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 public class ProductDAOImpl implements IProductDAO {
     private static final String BASE_QUERY = "SELECT id, name, price, product_type_id, producer_id, quantity, status, coupon_id, detail, import_date FROM products WHERE active = 1 ";
