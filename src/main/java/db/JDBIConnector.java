@@ -5,7 +5,7 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.sql.SQLException;
 
-public class JDBIConector {
+public class JDBIConnector {
     private static Jdbi jdbi;
 
     private static void connect() {
@@ -23,10 +23,10 @@ public class JDBIConector {
 
     }
 
-    public JDBIConector() {
+    public JDBIConnector() {
     }
 
-    public static Jdbi me() {
+    public static Jdbi getConnect() {
         if (jdbi == null) connect();
         return jdbi;
     }

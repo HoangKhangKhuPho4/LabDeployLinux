@@ -1,8 +1,8 @@
 package dao.impl;
 
 import dao.IProducerDAO;
-import model.*;
 import db.JDBIConnector;
+import model.Producer;
 
 import java.util.List;
 

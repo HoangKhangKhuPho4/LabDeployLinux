@@ -4,7 +4,6 @@ import dao.ICartItemDAO;
 import db.JDBIConnector;
 import model.cart.CartItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

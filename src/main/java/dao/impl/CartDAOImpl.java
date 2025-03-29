@@ -4,7 +4,6 @@ import dao.ICartDAO;
 import db.JDBIConnector;
 import model.cart.Cart;
 import model.cart.CartItem;
-import model.Product;
 
 import java.util.List;
 import java.util.Map;
