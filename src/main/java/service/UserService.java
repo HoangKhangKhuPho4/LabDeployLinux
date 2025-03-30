@@ -2,7 +2,7 @@ package service;
 
 import dao.UserDAO;
 import model.User;
-import db.JDBIConector;
+import db.JDBIConnector;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return JDBIConector.me().withHandle(handle ->
+        return JDBIConnector.getConnect().withHandle(handle ->
                 handle.createQuery("SELECT id, username, password, oauth_provider, oauth_uid, oauth_token, name, email, role_id, created_at, updated_at, status FROM users")
                         .map((rs, ctx) -> new User(
                                 rs.getInt("id"),
