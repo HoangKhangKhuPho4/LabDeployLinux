@@ -166,3 +166,51 @@
 	}
 
 })(jQuery);
+
+$(document).ready(function () {
+	$('.add-to-cart-btn').click(function () {
+		const productId = $(this).data('product');
+		$.ajax({
+			url: 'add-cart',
+			type: 'post',
+			data: {
+				productId: productId,
+			},
+			success: function (data) {
+				$('#cart-quantity').text(data.message);
+
+				Toastify({
+					text: data.status,
+					duration: 3000,
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "right", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "green",
+					},
+					onClick: function(){} // Callback after click
+				}).showToast();
+			},
+			error: function (data) {
+				const message = data.responseText;
+
+				Toastify({
+					text: message,
+					duration: 3000,
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "right", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "#D10024",
+					},
+					onClick: function(){} // Callback after click
+				}).showToast();
+			}
+		});
+	});
+});
+
