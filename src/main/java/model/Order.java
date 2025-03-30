@@ -15,6 +15,8 @@ public class Order {
     private String status;
     private String note;
     private String payment_method;
+    private int deliveryMethod;
+    private Double deliveryPrice;
     private Date orderDate;
     private Date deliveryDate;
     private Double totalPrice;
