@@ -1,9 +1,8 @@
-<%@ page import="Model.Product" %>
+<%@ page import="model.Product" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% List<Product> data = (List<Product>) request.getAttribute("listP");%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,10 +30,20 @@
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <link rel="icon" href="./img/logo.png" type="image/x-icon"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/jquery.zoom.min.js"></script>
 
-    <jsp:useBean id="a" class="DAO.ProductDAO" scope="request"></jsp:useBean>
-    <jsp:useBean id="b" class="DAO.ProducerDAO" scope="request"></jsp:useBean>
-    <jsp:useBean id="c" class="DAO.ProductTypeDAO" scope="request"></jsp:useBean>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <jsp:useBean id="a" class="service.impl.ProductServiceImpl" scope="request"></jsp:useBean>
+    <jsp:useBean id="b" class="dao.impl.ProducerDAOImpl" scope="request"></jsp:useBean>
+    <jsp:useBean id="c" class="dao.impl.ProductTypeDAOImpl" scope="request"></jsp:useBean>
 
 </head>
 <body>
@@ -77,9 +86,9 @@
                 <div class="aside">
                     <h3 class="aside-title">Hãng sản xuất</h3>
                     <div class="checkbox-filter">
-                        <c:forEach items="${b.selectAll()}" var="producer">
+                        <c:forEach items="${b.findAll()}" var="producer">
                             <div class="input-checkbox">
-                                <a href="category?idProducer=${producer.id}">${producer.name}</a>
+                                <a href="producer?id=${producer.id}">${producer.name}</a>
                             </div>
                         </c:forEach>
                     </div>
@@ -90,9 +99,9 @@
                 <div class="aside">
                     <h3 class="aside-title">Danh mục</h3>
                     <div class="checkbox-filter">
-                        <c:forEach items="${c.selectAll()}" var="productType">
+                        <c:forEach items="${c.findAll()}" var="productType">
                             <div class="input-checkbox">
-                                <a href="type?idProductType=${productType.id}">${productType.name}</a>
+                                <a href="type?id=${productType.id}">${productType.name}</a>
                             </div>
                         </c:forEach>
                     </div>
@@ -105,34 +114,32 @@
 
             <div id="content" class="row">
                 <!-- fullproduct -->
-                <% for (Product p : data){%>
+                <c:forEach var="product" items="${a.findAll()}">
                     <div class="col-md-4 col-xs-6">
                         <div class="product">
                             <div class="product-img">
-                                <img src="<%=p.getImg()%>" alt="">
+                                <img src="${product.images[0].linkImage}" alt="">
                             </div>
                             <div class="product-body">
-                                <p class="product-category"><%=p.getProducer().getName()%></p>
-
-                                <h3 class="product-name"><a href="sanpham.jsp?id=<%=p.getId()%>"><%=p.getName()%></a></h3>
-                                <fmt:formatNumber value="<%=p.getPrice()%>" type="number" pattern="#,##0"
-                                                  var="formattedPrice"/>
+                                <p class="product-category">${product.producer.name}</p>
+                                <h3 class="product-name"><a href="product?id=${product.id}">${product.name}</a></h3>
+                                <fmt:formatNumber value="${product.price}" type="number" pattern="#,##0" var="formattedPrice"/>
                                 <h4 class="product-price">${formattedPrice} VNĐ</h4>
                                 <div class="product-rating">
+                                    <!-- Add rating logic here if needed -->
                                 </div>
                                 <div class="product-btns">
+                                    <!-- Add any additional buttons here if needed -->
                                 </div>
                             </div>
                             <div class="add-to-cart">
-                                <form action="addcart" method="post">
-                                    <input type="hidden" name="id" value="<%= p.getId() %>">
-                                    <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
-                                </form>
+                                <button class="add-to-cart-btn" data-product="${product.id}">
+                                    <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                </button>
                             </div>
-
                         </div>
                     </div>
-                <%}%>
+                </c:forEach>
             </div>
             <!-- /fullproduct -->
 
@@ -141,13 +148,13 @@
         <!-- /store products -->
 
         <!-- store bottom filter -->
-        <div class="store-filter clearfix">
-            <ul class="store-pagination">
-                <c:forEach begin="1" end="${a.numberPage}" var="i">
-                    <li class="page-item"><a class="page-link" href="paging?index=${i}">${i}</a></li>
-                </c:forEach>
-            </ul>
-        </div>
+        <%--        <div class="store-filter clearfix">--%>
+        <%--            <ul class="store-pagination">--%>
+        <%--                <c:forEach begin="1" end="${a.numberPage}" var="i">--%>
+        <%--                    <li class="page-item"><a class="page-link" href="paging?index=${i}">${i}</a></li>--%>
+        <%--                </c:forEach>--%>
+        <%--            </ul>--%>
+        <%--        </div>--%>
         <!-- /store bottom filter -->
     </div>
     <!-- /STORE -->
@@ -159,16 +166,12 @@
 
 <!-- FOOTER -->
 <jsp:include page="footer.jsp"/>
+<script src="js/main.js"></script>
 <!-- /FOOTER -->
 
 
 <!-- jQuery Plugins -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/jquery.zoom.min.js"></script>
-<script src="js/main.js"></script>
+
 
 </body>
 </html>
