@@ -8,9 +8,7 @@ import utils.SessionUtil;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet(name = "LoginController", value = "/login")
@@ -29,17 +27,14 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
 
         req.setAttribute("username", username);
-        req.setAttribute("password", password);
+        req.setAttribute("password", "");
 
         if (userService.login(username, password)) {
             User loggedInUser = userService.getByUsername(username);
 
             if (loggedInUser != null) {
                 SessionUtil.getInstance().putKey(req, "user", loggedInUser);
-                req.setAttribute("success", "Đăng nhập thành công!");
-                req.setAttribute("username", "");
-                req.setAttribute("password", "");
-
+                // Sau khi đăng nhập thành công, chuyển hướng theo role
                 if (loggedInUser.getRoleId() == 1) { // Admin
                     resp.sendRedirect("admin.jsp");
                 } else { // Regular User

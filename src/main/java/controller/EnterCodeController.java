@@ -25,10 +25,11 @@ public class EnterCodeController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(SessionUtil.getInstance().getKey(req, "email") != null){
+        // Nếu có email trong session -> reset password
+        if (SessionUtil.getInstance().getKey(req, "email") != null) {
             String code = SessionUtil.getInstance().getKey(req, "codes").toString();
-            if(code.equals(req.getParameter("code"))){
-                SessionUtil.getInstance().delKey(req, "code");
+            if (code.equals(req.getParameter("code"))) {
+                SessionUtil.getInstance().delKey(req, "codes");
                 resp.sendRedirect("resetpassword");
                 return;
             }
@@ -36,35 +37,42 @@ public class EnterCodeController extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
             dispatcher.forward(req, resp);
             return;
-        }else{
-            if(SessionUtil.getInstance().getKey(req, "codes") != null){
+        } else {
+            // Trường hợp đăng ký
+            if (SessionUtil.getInstance().getKey(req, "codes") != null) {
                 String code = SessionUtil.getInstance().getKey(req, "codes").toString();
-                if(code.equals(req.getParameter("code"))){
-                    if(SessionUtil.getInstance().getKey(req, "userObj") != null){
-                        User user = (User) SessionUtil.getInstance().getKey(req, "userObj");
+                if (code.equals(req.getParameter("code"))) {
+                    if (SessionUtil.getInstance().getKey(req, "user") != null) {
+                        User user = (User) SessionUtil.getInstance().getKey(req, "user");
                         String rsRegister = userService.register(user);
-                        if(rsRegister == null){
+                        if (rsRegister == null) {
                             req.setAttribute("error", "Đăng ký thất bại!");
                             RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
                             dispatcher.forward(req, resp);
-                        }else{
+                            return;
+                        } else {
                             req.setAttribute("success", "Đăng ký thành công!");
-                            SessionUtil.getInstance().delKey(req, "code");
-                            SessionUtil.getInstance().delKey(req, "userObj");
+                            SessionUtil.getInstance().delKey(req, "codes");
+                            SessionUtil.getInstance().delKey(req, "user");
+                            // Nếu cần lưu lại thông tin user đã đăng ký
                             SessionUtil.getInstance().putKey(req, "user", rsRegister);
                             RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
                             dispatcher.forward(req, resp);
+                            return;
                         }
-                    }else{
+                    } else {
                         resp.sendRedirect("dangnhap.jsp");
+                        return;
                     }
-                }else{
+                } else {
                     req.setAttribute("error", "Mã code không chính xác");
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
+                    dispatcher.forward(req, resp);
+                    return;
                 }
-                RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
-                dispatcher.forward(req, resp);
-            }else{
+            } else {
                 resp.sendRedirect("dangnhap.jsp");
+                return;
             }
         }
     }

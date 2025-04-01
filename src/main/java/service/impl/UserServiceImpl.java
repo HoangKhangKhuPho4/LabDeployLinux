@@ -1,8 +1,6 @@
 package service.impl;
 
-import dao.IRoleDao;
 import dao.IUserDao;
-import dao.impl.RoleDaoImpl;
 import dao.impl.UserDaoImpl;
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,45 +11,60 @@ import java.util.UUID;
 
 public class UserServiceImpl implements IUserService {
 
-
     @Override
     public boolean login(String username, String password) {
-        return false;
+        IUserDao userDao = new UserDaoImpl();
+        User user = userDao.getUserByUserName(username);
+        if(user == null) {
+            return false;
+        }
+        // So sánh mật khẩu nhập với mật khẩu đã băm trong DB
+        return BCrypt.checkpw(password, user.getPassword());
     }
 
     @Override
     public String register(User user) {
-        return "";
+        // Băm mật khẩu trước khi lưu
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hashedPassword);
+        IUserDao userDao = new UserDaoImpl();
+        boolean result = userDao.register(user);
+        return result ? "registered" : null;
     }
 
     @Override
     public boolean isUsernameExists(String username) {
-        return false;
+        IUserDao userDao = new UserDaoImpl();
+        return userDao.isUserNameExists(username);
     }
 
     @Override
     public String getIdByUsername(String username) {
+        // TODO: triển khai
         return "";
     }
 
     @Override
     public User getByUsername(String username) {
-        return null;
+        IUserDao userDao = new UserDaoImpl();
+        return userDao.getUserByUserName(username);
     }
 
     @Override
     public User getById(Integer id) {
+        // TODO: triển khai
         return null;
     }
 
     @Override
     public boolean isEmailExists(String email) {
+        // TODO: triển khai
         return false;
     }
 
     @Override
     public void resetPass(String email, String password) {
-
+        // TODO: triển khai
     }
 
     @Override
@@ -81,7 +94,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public String createId() {
-        return "";
+        return UUID.randomUUID().toString();
     }
 
     @Override

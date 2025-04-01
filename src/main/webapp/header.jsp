@@ -7,6 +7,7 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.User" %> <!-- Import model.User -->
 <html>
 <head>
     <title>Header</title>
@@ -24,19 +25,17 @@
                 <li><a href="#"><i class="fa fa-map-marker"></i>Quận Thủ Đức - Tp.Hồ Chí Minh</a></li>
             </ul>
             <ul class="header-links pull-right">
-                <c:set var="user" value="${sessionScope.user}"/>
+                <c:set var="user" value="${sessionScope.user}" />
                 <c:choose>
-                    <c:when test="${user != null}">
-                        <li><a href="user-information.jsp?id=${user.id}"><i class="fa fa-user-o"></i> ${user.name}</a>
-                        </li>
+                    <c:when test="${user != null and user['class'].simpleName == 'User'}">
+                        <li><a href="user-information.jsp?id=${user.id}"><i class="fa fa-user-o"></i> ${user.name}</a></li>
                         <li><a href="logout"><i class="fa fa-user-o"></i> Đăng xuất</a></li>
                     </c:when>
                     <c:otherwise>
-                        <li><a href="sign-up.jsp"><i class="fa fa-user-o"></i> Đăng kí</a></li>
-                        <li><a href="sign-in.jsp"><i class="fa fa-user-o"></i> Đăng nhập</a></li>
+                        <li><a href="dangky.jsp"><i class="fa fa-user-o"></i> Đăng kí</a></li>
+                        <li><a href="dangnhap.jsp"><i class="fa fa-user-o"></i> Đăng nhập</a></li>
                     </c:otherwise>
                 </c:choose>
-
             </ul>
         </div>
     </div>
@@ -103,21 +102,23 @@
 <!-- /HEADER -->
 <script>
     $(document).ready(function () {
-        <%if (session.getAttribute("user") != null) { %>
-        $.ajax({
-            url: 'api/cart/total-cart-item',
-            method: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                $('#cart-quantity').text(response);
-            },
-            error: function (xhr, status, error) {
-                console.error('Failed to fetch cart count:', error);
-            }
-        })
-        <%} else {%>
-        $('#cart-quantity').text("0");
-        <%}%>
+        const user = <%= session.getAttribute("user") != null ? "true" : "false" %>;
+        if (user) {
+            $.ajax({
+                url: 'api/cart/total-cart-item',
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#cart-quantity').text(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to fetch cart count:', error);
+                    $('#cart-quantity').text("0");
+                }
+            });
+        } else {
+            $('#cart-quantity').text("0");
+        }
     });
 </script>
 </body>
