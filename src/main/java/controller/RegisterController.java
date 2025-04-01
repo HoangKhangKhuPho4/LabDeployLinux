@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -40,6 +41,7 @@ public class RegisterController extends HttpServlet {
                 req.setAttribute("error", "Tên người dùng đã tồn tại!");
                 req.getRequestDispatcher("dangky.jsp").forward(req, resp);
             } else {
+                // Tạo đối tượng User
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
@@ -53,17 +55,21 @@ public class RegisterController extends HttpServlet {
                 user.setUpdatedAt(LocalDateTime.now());
                 user.setStatus(1); // trạng thái kích hoạt
 
-                SessionUtil.getInstance().putKey(req, "userObj", user);
+                // Lưu user vào session với key "user"
+                HttpSession session = req.getSession();
+                session.setAttribute("user", user);
 
                 // Tạo mã xác thực
                 Random random = new Random();
                 String code = String.format("%06d", random.nextInt(999999));
 
-                // Gửi mail chứa mã xác thực
+                // Gửi email chứa mã OTP
                 MailUtil.getInstance().sendMail("Mã code của bạn: " + code, "Mã xác thực tài khoản", email);
 
-                SessionUtil.getInstance().putKey(req, "codes", code);
+                // Lưu mã OTP vào session với key "codes"
+                session.setAttribute("codes", code);
 
+                // Chuyển hướng đến trang nhập mã xác thực
                 resp.sendRedirect("entercode");
             }
         } else {
