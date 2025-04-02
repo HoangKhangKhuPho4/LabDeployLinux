@@ -51,11 +51,11 @@ public class EnterCodeController extends HttpServlet {
                             dispatcher.forward(req, resp);
                             return;
                         } else {
-                            req.setAttribute("success", "Đăng ký thành công!");
+                            // Đặt flag xác nhận OTP thành công trong session
+                            SessionUtil.getInstance().putKey(req, "otpSuccess", true);
+                            // Xóa các session attribute không cần nữa
                             SessionUtil.getInstance().delKey(req, "codes");
                             SessionUtil.getInstance().delKey(req, "user");
-                            // Nếu cần lưu lại thông tin user đã đăng ký
-                            SessionUtil.getInstance().putKey(req, "user", rsRegister);
                             RequestDispatcher dispatcher = req.getRequestDispatcher("enterCode.jsp");
                             dispatcher.forward(req, resp);
                             return;

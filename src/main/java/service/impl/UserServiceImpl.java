@@ -2,10 +2,11 @@ package service.impl;
 
 import dao.IUserDao;
 import dao.impl.UserDaoImpl;
+import db.JDBIConnector;
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import service.IUserService;
-
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,13 +59,28 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean isEmailExists(String email) {
-        // TODO: triển khai
-        return false;
+        IUserDao userDao = new UserDaoImpl();
+        return userDao.isEmailExists(email);
     }
 
     @Override
     public void resetPass(String email, String password) {
-        // TODO: triển khai
+        try {
+            // Băm mật khẩu mới trước khi update vào DB
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            int rowsAffected = JDBIConnector.getConnect().withHandle(handle -> {
+                return handle.createUpdate("UPDATE users SET password = ?, updated_at = ? WHERE email = ?")
+                        .bind(0, hashedPassword)
+                        .bind(1, new Timestamp(System.currentTimeMillis()))
+                        .bind(2, email)
+                        .execute();
+            });
+            if (rowsAffected == 0) {
+                System.out.println("Reset pass update failed for email: " + email);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

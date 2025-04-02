@@ -12,19 +12,25 @@
 <body>
 <div class="wrapper">
     <h1>Cập nhập lại mật khẩu</h1>
-    <c:if test="${error != null}">
+    <c:if test="${not empty error}">
         <p class="alert alert-danger">${error}</p>
     </c:if>
-    <form action="" method="post">
-        <input type="password" placeholder="Mật khẩu" name="password" required value="${password}">
-        <input type="password" placeholder="Nhập lại mật khẩu" name="enterPassword" required value="${enterPassword}">
+    <!-- Hiển thị thông báo success nếu có -->
+    <c:if test="${not empty success}">
+        <p class="alert alert-success">${success}</p>
+    </c:if>
+    <form action="${pageContext.request.contextPath}/resetpassword" method="post">
+        <input type="password" placeholder="Mật khẩu" name="password" required>
+        <input type="password" placeholder="Nhập lại mật khẩu" name="enterPassword" required>
         <button style="border: none" type="submit">Cập nhập mật khẩu</button>
     </form>
 </div>
-<c:if test="${success != null}">
+<c:if test="${not empty success}">
     <script>
-        alert("Cập nhập lại mật khẩu thành công");
-        document.location.href = "/";
+        // Sau 3 giây chuyển hướng sang trang đăng nhập
+        setTimeout(function(){
+            window.location.href = "${pageContext.request.contextPath}/dangnhap.jsp";
+        }, 3000);
     </script>
 </c:if>
 </body>
