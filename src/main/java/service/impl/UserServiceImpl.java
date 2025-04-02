@@ -92,10 +92,19 @@ public class UserServiceImpl implements IUserService {
     public void deleteById(Integer id) {
 
     }
-
     @Override
     public void update(User user) {
-
+        try {
+            JDBIConnector.getConnect().withHandle(handle -> {
+                return handle.createUpdate("UPDATE users SET password = ?, updated_at = ? WHERE id = ?")
+                        .bind(0, user.getPassword())
+                        .bind(1, java.sql.Timestamp.valueOf(user.getUpdatedAt()))
+                        .bind(2, user.getId())
+                        .execute();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
