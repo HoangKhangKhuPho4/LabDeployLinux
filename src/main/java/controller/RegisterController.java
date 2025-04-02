@@ -50,7 +50,7 @@ public class RegisterController extends HttpServlet {
                 user.setOauthProvider(null);
                 user.setOauthUid(null);
                 user.setOauthToken(null);
-                user.setRoleId(2); // Role mặc định: user thông thường (ví dụ roleId=2)
+                user.setRoleId(4); // Regular User
                 user.setCreatedAt(LocalDateTime.now());
                 user.setUpdatedAt(LocalDateTime.now());
                 user.setStatus(1); // trạng thái kích hoạt
@@ -68,7 +68,6 @@ public class RegisterController extends HttpServlet {
 
                 // Lưu mã OTP vào session với key "codes"
                 session.setAttribute("codes", code);
-
                 // Chuyển hướng đến trang nhập mã xác thực
                 resp.sendRedirect("entercode");
             }

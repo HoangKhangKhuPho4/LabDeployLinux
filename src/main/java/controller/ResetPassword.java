@@ -28,21 +28,25 @@ public class ResetPassword extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(SessionUtil.getInstance().getKey(req, "email") == null) {
+        if (SessionUtil.getInstance().getKey(req, "email") == null) {
             resp.sendRedirect("/");
             return;
         }
         String password = req.getParameter("password");
         String enterPassword = req.getParameter("enterPassword");
-        if(password.equals(enterPassword)){
+        if (password.equals(enterPassword)) {
             userService.resetPass(SessionUtil.getInstance().getKey(req, "email").toString(), password);
             SessionUtil.getInstance().delKey(req, "email");
             SessionUtil.getInstance().delKey(req, "codes");
-            req.setAttribute("success", "Mật khẩu và nhập lại mật khẩu không giống nhau");
-        }else{
+            // Đặt thông báo thành công
+            req.setAttribute("success", "Cập nhật mật khẩu thành công! Chuyển hướng đến đăng nhập sau 3 giây.");
+            // Forward về cùng trang resetPassword.jsp để hiển thị thông báo
+            RequestDispatcher dispatcher = req.getRequestDispatcher("resetPassword.jsp");
+            dispatcher.forward(req, resp);
+        } else {
             req.setAttribute("error", "Mật khẩu và nhập lại mật khẩu không giống nhau");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("resetPassword.jsp");
+            dispatcher.forward(req, resp);
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("resetPassword.jsp");
-        dispatcher.forward(req, resp);
     }
 }
