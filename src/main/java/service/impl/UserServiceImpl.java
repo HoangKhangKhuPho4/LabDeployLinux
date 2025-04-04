@@ -16,12 +16,13 @@ public class UserServiceImpl implements IUserService {
     public boolean login(String username, String password) {
         IUserDao userDao = new UserDaoImpl();
         User user = userDao.getUserByUserName(username);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
         // So sánh mật khẩu nhập với mật khẩu đã băm trong DB
         return BCrypt.checkpw(password, user.getPassword());
     }
+
 
     @Override
     public String register(User user) {
@@ -92,10 +93,23 @@ public class UserServiceImpl implements IUserService {
     public void deleteById(Integer id) {
 
     }
-
     @Override
-    public void update(User user) {
-
+    public boolean update(User user) {
+        try {
+            int rowsAffected = JDBIConnector.getConnect().withHandle(handle -> {
+                return handle.createUpdate("UPDATE users SET password = ?, updated_at = ?, secret_key = ?, twoFaEnabled = ? WHERE id = ?")
+                        .bind(0, user.getPassword())
+                        .bind(1, java.sql.Timestamp.valueOf(user.getUpdatedAt()))
+                        .bind(2, user.getSecretKey())
+                        .bind(3, user.isTwoFaEnabled())
+                        .bind(4, user.getId())
+                        .execute();
+            });
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
