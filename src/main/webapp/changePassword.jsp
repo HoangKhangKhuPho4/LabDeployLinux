@@ -9,10 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/register.css">
     <style>
-        body {
-            background-color: #f7f7f7;
-        }
-
+        body { background-color: #f7f7f7; }
         .change-pass-container {
             max-width: 700px;
             margin: 80px auto;
@@ -21,25 +18,14 @@
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-
         .change-pass-container h2 {
             margin-bottom: 30px;
             text-align: center;
             color: #333;
             font-size: 28px;
         }
-
-        .form-group label {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .form-control {
-            font-size: 18px;
-            padding: 15px;
-            border-radius: 4px;
-        }
-
+        .form-group label { font-weight: bold; font-size: 18px; }
+        .form-control { font-size: 18px; padding: 15px; border-radius: 4px; }
         .btn-change {
             width: 100%;
             background-color: #ff5722;
@@ -50,11 +36,7 @@
             border-radius: 4px;
             margin-top: 20px;
         }
-
-        .btn-change:hover {
-            background-color: #e64a19;
-        }
-
+        .btn-change:hover { background-color: #e64a19; }
         .login-link {
             display: block;
             text-align: center;
@@ -64,10 +46,7 @@
             text-decoration: none;
             font-weight: bold;
         }
-
-        .login-link:hover {
-            text-decoration: underline;
-        }
+        .login-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -77,7 +56,9 @@
         <div class="alert alert-danger" role="alert">${error}</div>
     </c:if>
     <c:if test="${not empty success}">
-        <div class="alert alert-success" role="alert">${success}</div>
+        <div class="alert alert-success" role="alert" id="msgSuccess">
+                ${success}
+        </div>
     </c:if>
     <form action="changePassword" method="post">
         <div class="form-group">
@@ -92,12 +73,21 @@
             <label for="confirmPassword">Xác nhận mật khẩu mới</label>
             <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Xác nhận mật khẩu mới" required>
         </div>
-        <button type="submit" class="btn-change">Lưu thay đổi</button>
+        <!-- Xóa trường nhập mã OTP -->
+        <button type="submit" class="btn-change">Đổi mật khẩu</button>
     </form>
     <c:if test="${not empty success}">
         <a href="dangnhap.jsp" class="login-link">Đăng nhập ngay</a>
     </c:if>
 </div>
+<script>
+    setTimeout(function() {
+        var msg = document.getElementById("msgSuccess");
+        if (msg) {
+            msg.style.display = "none";
+        }
+    }, 1000);
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

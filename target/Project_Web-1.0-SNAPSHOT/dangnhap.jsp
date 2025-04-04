@@ -55,7 +55,7 @@
 <div class="wrapper">
     <h1>Đăng nhập</h1>
     <c:if test="${error != null}">
-        <p class="alert alert-danger">${error}</p>
+        <p class="alert alert-danger" id="errorMessage">${error}</p>
     </c:if>
     <form action="login" method="post">
         <input type="text" placeholder="Tên đăng nhập" name="username" required value="${username}">
@@ -135,5 +135,14 @@
         document.location.href = "index.jsp";
     </script>
 </c:if>
+
+<script>
+    setTimeout(function() {
+        var errorMsg = document.getElementById("errorMessage");
+        if(errorMsg){
+            errorMsg.style.display = "none";
+        }
+    }, 2000);
+</script>
 </body>
 </html>
