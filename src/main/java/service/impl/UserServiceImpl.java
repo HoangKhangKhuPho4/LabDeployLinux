@@ -7,14 +7,15 @@ import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import service.IUserService;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public class UserServiceImpl implements IUserService {
+    IUserDao userDao = new UserDaoImpl();
 
     @Override
     public boolean login(String username, String password) {
-        IUserDao userDao = new UserDaoImpl();
         User user = userDao.getUserByUserName(username);
         if (user == null) {
             return false;
@@ -54,8 +55,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User getById(Integer id) {
-        // TODO: triển khai
-        return null;
+        return userDao.getUserByUserId(id); // Gọi phương thức getUserByUserId từ DAO
+
     }
 
     @Override
@@ -91,6 +92,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteById(Integer id) {
+        userDao.deleteById(id); // Gọi phương thức deleteById từ DAO
 
     }
     @Override
@@ -114,6 +116,17 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void add(User user, String role) {
+        if(userDao.isEmailExists(user.getEmail()) || userDao.isUserNameExists(user.getUsername())) {
+            throw new RuntimeException("Email hoặc Username đã tồn tại");
+        }
+        // Băm mật khẩu trước khi lưu
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hashedPassword);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setStatus(1); // Mặc định kích hoạt
+        userDao.register(user);
+        // Có thể thêm logic gửi email chào mừng ở đây
 
     }
 
