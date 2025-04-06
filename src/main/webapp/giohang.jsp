@@ -1,7 +1,3 @@
-<%@ page import="Cart.Cart" %>
-<%@ page import="Cart.CartProduct" %>
-<%@ page import="java.util.List" %>
-<%@ page import="Model.Product" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  language="java" %>
@@ -34,7 +30,6 @@
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
 
-    <jsp:useBean id="a" class="DAO.NewProductDAO" scope="request"/>
 </head>
 <body>
 <!-- HEADER -->
@@ -65,20 +60,13 @@
 <!-- /BREADCRUMB -->
 
 <!-- SECTION -->
-<%
-    Cart cart = (Cart) session.getAttribute("cart");
-    List<CartProduct> cartProducts = cart != null ? cart.getCartProducts() : null;
-
-    if (cart != null) {
-
-%>
 <div class="container main-section">
     <div class="row">
-
-    <div class="col-lg-12 pl-3 pt-3">
+        <div class="col-lg-12 pl-3 pt-3">
             <table class="table table-hover border bg-white">
                 <thead>
                 <tr>
+                    <input type="checkbox" id="selectAll" onchange="selectAll()"> Chọn tất cả<br>
                     <th>
                         <h4><b>Thông tin sản phẩm</b></h4>
                     </th>
@@ -95,153 +83,251 @@
                         <h4><b>Xóa</b></h4>
                     </th>
                 </tr>
-
                 </thead>
-                <tbody>
-
-                <% for (CartProduct cartProduct : cartProducts) { %>
-                <tr>
-                    <td>
-                        <div class="row">
-                            <div class="col-lg-2 Product-img">
-                                <img src="<%=cartProduct.getProduct().getImg()%>" alt="..." class="img-responsive"/>
-                            </div>
-                            <div class="col-lg-10">
-                                <h5 class="nomargin"> <b> <%=cartProduct.getProduct().getName()%></b> </h5>
-                                <p> </p>
-                            </div>
-                        </div>
-                    </td>
-                    <fmt:formatNumber value="<%=cartProduct.getProduct().getPrice()%>" type="number" pattern="#,##0"
-                                      var="formattedPrice"/>
-                    <td> <strong> ${formattedPrice} VND</strong> </td>
-                    <td data-th="Quantity">
-                        <div class="input-group quantity-control">
-                            <button class="btn btn-outline-secondary decrease-qty" data-id="<%= cartProduct.getProduct().getId() %>">-</button>
-                            <input type="text" class="form-control text-center quantity-input" data-id="<%= cartProduct.getProduct().getId() %>"
-                                   value="<%= cartProduct.getQuantity() %>" min="1">
-                            <button class="btn btn-outline-secondary increase-qty" data-id="<%= cartProduct.getProduct().getId() %>">+</button>
-                        </div>
-                    </td>
-
-
-                    <fmt:formatNumber value="<%=cartProduct.getProduct().getPrice()*cartProduct.getQuantity()%>" type="number" pattern="#,##0"
-                                      var="formattedPrice1"/>
-                    <td> <strong> ${formattedPrice1} VND</strong> </td>
-                    <td class="actions" data-th="" style="width:10%;">
-                        <!-- Delete-->
-                        <div id="deleteEmployeeModal_<%= cartProduct.getProduct().getId() %>" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="delcart" method="post">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Xóa sản phẩm này khỏi giỏ hàng</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
-                                            <input type="hidden" name="productId" value="<%= cartProduct.getProduct().getId()%>">
-                                            <input type="submit" class="btn btn-danger" value="Xóa">
-                                        </div>
-                                    </form>
+                <form id="checkoutForm" action="check-out" method="post">
+                    <tbody>
+                    <c:forEach items="${cartItems}" var="item">
+                        <tr class="cart-item" id="item-${item.product.id}">
+                            <td>
+                                <input type="checkbox" class="productCheckbox" name="selectedProductIds"
+                                       value="${item.product.id}"
+                                       data-price="${item.product.price}"
+                                       data-quantity="${item.quantity}"
+                                       onchange="updateTotalAmount()" style="margin-left: -30px; position: absolute;">
+                                <div class="row">
+                                    <div class="col-lg-2 Product-img">
+                                        <img src="${item.product.images[0].linkImage}" alt=".   .."
+                                             class="img-responsive"/>
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <h5 class="nomargin"><b>${item.product.name}
+                                        </b></h5>
+                                        <p></p>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!--/ Delete-->
-                        <button data-toggle="modal" data-target="#deleteEmployeeModal_<%= cartProduct.getProduct().getId() %>" class="btn btn-danger btn-sm"> <i class="fa fa-trash-o"> </i> </button>
-                    </td>
-                </tr>
-                <%
-                        }
-                %>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td> <a href="index.jsp" class="btn btn-success "> <i class="fa fa-angle-left"> </i> Tiếp tục mua sắm </a> </td>
-                    <td colspan="2" class="hidden-xs"> </td>
 
-                    <td class="hidden-xs text-center" style="width:10%;">
-                        <fmt:formatNumber value="<%= cart.amount(cartProducts) %>" type="number" pattern="#,##0"
-                                          var="formattedPrice2"/>
-                        <strong>Tổng tiền : ${formattedPrice2} VND</strong>
-                    </td>
+                                <input type="hidden" name="${item.product.id}"
+                                       value="${item.product.name}"/>
 
-                    <td> <a href="thanhtoan.jsp" class="btn btn-success btn-block"> Thanh toán <i class="fa fa-angle-right"> </i> </a> </td>
-                </tr>
-                </tfoot>
+                            </td>
+                            <fmt:formatNumber value="${item.product.price}" type="number" pattern="#,##0"
+                                              var="formattedPrice"/>
+                            <td class="product-price"><strong class="product-price">${formattedPrice} VNĐ</strong></td>
+                            <td data-th="Quantity">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-minus" style="background: #5cb85c; border: none">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control bg-secondary text-center" value="${item.quantity}">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-plus" style="background: #5cb85c; border: none">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <fmt:formatNumber value="${item.product.price * item.quantity}" type="number" pattern="#,##0" var="formattedPrice1"/>
+                            <td id="subtotal-${item.product.id}"> <strong class="total-price">${formattedPrice1} VNĐ</strong></td>
+                            <td class="actions" data-th="" style="width:10%;"><p data-toggle="modal" data-product-id="${item.product.id}" data-target="#delete"
+                                                                                 class="btn btn-danger btn-sm delete-product"><i class="fa fa-trash-o"></i></p>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td><a href="index.jsp" class="btn btn-success "> <i class="fa fa-angle-left"> </i> Tiếp tục mua sắm</a></td>
+                        <td colspan="2" class="hidden-xs"></td>
+                        <td class="hidden-xs text-center" style="width:10%;">
+                            <fmt:formatNumber value="${totalPrice}" type="number" pattern="#,##0"
+                                              var="formattedPrice2"/>
+                            <span id="totalAmountLabel" style="font-weight: bold;"><strong>Tổng tiền : ${formattedPrice2}</strong></span>
+                        </td>
+                        <td>
+                            <input type="submit" id="paybutton" name="action" class="btn btn-success btn-block"
+                                   value="Thanh toán">
+
+                        </td>
+                    </tr>
+                    </tfoot>
+                </form>
             </table>
+            <!-- Delete-->
+            <div id="delete" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Xóa sản phẩm này khỏi giỏ hàng</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+                            <input type="hidden" name="productId" value="${item.product.id}">
+                            <button id="confirm-delete" type="button" class="btn btn-danger">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <%
-            } else { %>
-        <!-- Xử lý khi giỏ hàng không tồn tại -->
-        <a  style=" text-align: center; margin-left: 500px; font-size: 30px" >
-            <strong>Giỏ hàng trống</strong>
-            <br>
-            <br>
-            <a href="index.jsp" class="btn btn-success " style="margin-left: 540px;"> <i class="fa fa-angle-left"> </i> Tiếp tục mua sắm </a>
-            <br>
-        </a>
-        <% } %>
     </div>
 </div>
-
-
-<!-- /SECTION -->
-
-
-<!-- FOOTER -->
 <jsp:include page="footer.jsp"/>
-<!-- /FOOTER -->
-<!-- jQuery Plugins -->
-
-
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/jquery.zoom.min.js"></script>
-<script src="js/main.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".increase-qty, .decrease-qty").click(function () {
-            let productId = $(this).data("id");
-            let inputField = $(".quantity-input[data-id='" + productId + "']");
-            let currentQty = parseInt(inputField.val());
-            let newQty = $(this).hasClass("increase-qty") ? currentQty + 1 : currentQty - 1;
-
-            if (newQty < 1) return;
-
-            updateCartQuantity(productId, newQty);
-        });
-
-        $(".quantity-input").change(function () {
-            let productId = $(this).data("id");
-            let newQty = parseInt($(this).val());
-
-            if (isNaN(newQty) || newQty < 1) {
-                $(this).val(1);
-                newQty = 1;
-            }
-
-            updateCartQuantity(productId, newQty);
-        });
-
-        function updateCartQuantity(productId, quantity) {
-            $.ajax({
-                url: "<%= request.getContextPath() %>/updateCart",
-                type: "POST",
-                data: { productId: productId, quantity: quantity },
-                success: function (response) {
-                    location.reload();
-                },
-                error: function () {
-                    alert("Có lỗi xảy ra khi cập nhật số lượng!");
-                }
-            });
+    $('.btn-minus').click(function () {
+        var input = $(this).closest('.input-group').find('input');
+        var newValue = parseInt(input.val()) - 1;
+        if (newValue >= 1) {
+            input.val(newValue);
+            var productId = $(this).closest('.cart-item').attr('id').split('-')[1];
+            updateQuantity(productId, newValue);
         }
     });
-</script>
 
+    // Update quantity when clicking the plus button
+    $('.btn-plus').click(function () {
+        var input = $(this).closest('.input-group').find('input');
+        var newValue = parseInt(input.val()) + 1;
+        input.val(newValue);
+        var productId = $(this).closest('.cart-item').attr('id').split('-')[1];
+        updateQuantity(productId, newValue);
+    });
+
+    // Update quantity when manually entering the value
+    $('.quantity input').change(function () {
+        var newValue = parseInt($(this).val());
+        if (newValue >= 1) {
+            var productId = $(this).closest('.cart-item').attr('id').split('-')[1];
+            updateQuantity(productId, newValue);
+        } else {
+            $(this).val(1);
+            var productId = $(this).closest('.cart-item').attr('id').split('-')[1];
+            updateQuantity(productId, 1);
+        }
+    });
+
+    function updateQuantity(productId, quantity) {
+        var data = {
+            productId: productId,
+            quantity: quantity
+        };
+        $.ajax({
+            url: '/home/update-quantity-cart-item',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                updateCartItem(productId, response.newPrice);
+                updateTotalAmount();
+            },
+            error: function (xhr) {
+                Toastify({
+                    text: 'Cập nhật thất bại',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "#D10024",
+                    },
+                    onClick: function () {
+                    }
+                }).showToast();
+            }
+        });
+    }
+
+    const formatter = Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    });
+
+    function updateCartItem(productId, newPrice) {
+        var cartItem = $('#item-' + productId);
+        var totalElement = cartItem.find('.total-price');
+        totalElement.text(formatter.format(newPrice).replace(/₫/, 'VNĐ'));
+    }
+
+    function updateTotalAmount() {
+        var totalAmount = 0;
+
+        $('input[name="selectedProductIds"]:checked').each(function () {
+            var price = parseFloat($(this).data('price'));
+            var quantity = parseInt($(this).data('quantity'));
+            totalAmount += price * quantity;
+        });
+
+        var formattedTotalAmount = formatter.format(totalAmount).replace(/₫/, ' VNĐ');
+        $('#totalAmountLabel').text('Tổng tiền: ' + formattedTotalAmount);
+    }
+
+</script>
+<script>
+    $('#checkoutForm').on('submit', function (event) {
+        var checkboxes = $('input[name="selectedProductIds"]:checked');
+        if (checkboxes.length === 0) {
+            event.preventDefault();
+            Toastify({
+                text: "Vui lòng chọn ít nhất một sản phẩm trước khi thanh toán",
+                duration: 3000,
+                newWindow: true,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "#D10024",
+                },
+                onClick: function () {
+                }
+            }).showToast();
+        }
+    });
+
+    // Select all products
+    $('#selectAll').on('change', function () {
+        var isChecked = $(this).is(':checked');
+        $('input[name="selectedProductIds"]').prop('checked', isChecked);
+        updateTotalAmount();
+    });
+
+    // Update total amount when selecting products
+    $('input[name="selectedProductIds"]').on('change', function () {
+        updateTotalAmount();
+    });
+</script>
+<script>
+    function removeCartItem(productId) {
+        $.ajax({
+            url: 'api/remove-cart-item?productId=' + productId,
+            type: 'DELETE',
+            success: function (response) {
+                $('#item-' + productId).remove();
+                $(`#delete`).modal('hide');
+                const totalItem = $(`#cart-quantity`);
+                totalItem.text(parseInt(totalItem.text()) - 1);
+            },
+            error: function (error) {
+                console.error('Có lỗi xảy ra khi xóa sản phẩm:', error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('.delete-product').click(function () {
+            let productId = $(this).data('product-id');
+            $(`#delete`).data('product-id', productId);
+        });
+
+        $('#confirm-delete').click(function () {
+            let productId = $(`#delete`).data('product-id');
+            removeCartItem(productId);
+        });
+    });
+</script>
+<script src="js/main.js"></script>
 </body>
 </html>
