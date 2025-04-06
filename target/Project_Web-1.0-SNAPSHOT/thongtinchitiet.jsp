@@ -1,10 +1,10 @@
-<%@ page import="DAO.impl.userDaoImpl" %>
-<%@ page import="Model.User" %>
-<%@ page import="DAO.OrderDAO" %>
-<%@ page import="Model.Order" %>
+<%@ page import="dao.impl.UserDaoImpl" %>
+<%@ page import="model.User" %>
+<%@ page import="dao.impl.OrderDAOImpl" %>
+<%@ page import="model.Order" %>
 <%@ page import="java.util.List" %>
-<%@ page import="DAO.OrderDetailsDAO" %>
-<%@ page import="Model.OrderDetails" %>
+<%@ page import="dao.impl.OrderDetailDAOImpl" %>
+<%@ page import="model.OrderDetails" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -51,7 +51,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <jsp:useBean id="a" class="DAO.impl.userDaoImpl" scope="request"/>
+    <jsp:useBean id="a" class="dao.impl.UserDaoImpl" scope="request"/>
 
     <style>
 
@@ -127,8 +127,8 @@
                         <h5 class="title">Thông tin người dùng</h5>
                     </div>
                     <%
-                        userDaoImpl userDAO = new userDaoImpl();
-                        User user = userDAO.getById(request.getParameter("id"));
+                        UserDaoImpl userDAO = new UserDaoImpl();
+                        User user = userDAO.getUserByUserId(Integer.valueOf(request.getParameter("id")));
                     %>
                     <div class="form-group">
                         <div class="top">Tên Người Dùng</div>
@@ -142,7 +142,7 @@
                     </div>
                     <div class="form-group">
                         <div class="top">Tên đăng nhập</div>
-                        <div class="bot"><%=user.getUser_name()%>
+                        <div class="bot"><%=user.getName()%>
                         </div>
                     </div>
                 </div>
@@ -170,9 +170,9 @@
                                     </thead>
                                     <tbody>
                                     <%
-                                        OrderDAO orderDAO = new OrderDAO();
+                                        OrderDAOImpl orderDAO = new OrderDAOImpl();
 
-                                        List<Order> orders = orderDAO.selectAllById(request.getParameter("id"));
+                                        List<Order> orders = orderDAO.findByIdUser(Integer.valueOf(request.getParameter("id")));
 
                                         for (Order order : orders) {
                                     %>
@@ -183,14 +183,14 @@
                                         </td>
                                         <td><%=order.getStatus()%>
                                         </td>
-                                        <td><%=order.getPayMent()%>
+                                        <td><%=order.getPayment_method()%>
                                         </td>
                                         <td><%=order.getOrderDate()%>
                                         </td>
                                         <td><%=order.getDeliveryDate()%>
                                         </td>
                                         <td><strong class="order-total">
-                                            <fmt:formatNumber value="<%=order.getAmount()%>" type="number"
+                                            <fmt:formatNumber value="<%=order.getTotalPrice()%>" type="number"
                                                               pattern="#,##0" var="formattedPrice"/>
                                             <h5 class="product-price">${formattedPrice} VNĐ</h5>
                                         </strong>
@@ -231,8 +231,8 @@
                                                     </button>
                                                 </div>
                                                 <%
-                                                    OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
-                                                    List<OrderDetails> orderDetails = orderDetailsDAO.selectByIdOrder(order.getId());
+                                                    OrderDetailDAOImpl orderDetailsDAO = new OrderDetailDAOImpl();
+                                                    List<OrderDetails> orderDetails = orderDetailsDAO.findByIdOrder(order.getId());
                                                     for (OrderDetails orderDetail : orderDetails) {
                                                 %>
                                                 <div class="modal-body">
@@ -241,13 +241,13 @@
                                                     <p><strong>Số lượng:</strong> <%=orderDetail.getId()%>
                                                     </p>
                                                     <p><strong>Đơn giá:</strong> <fmt:formatNumber
-                                                            value="<%=orderDetail.getPrice()%>" type="number"
+                                                            value="<%=orderDetail.getAmount()%>" type="number"
                                                             pattern="#,##0"/> VNĐ</p>
                                                     <p><strong>Khuyến mãi:</strong> <fmt:formatNumber
                                                             value="<%=orderDetail.getDiscount()%>" type="number"
                                                             pattern="#,##0"/> VNĐ</p>
                                                     <p><strong>Thành tiền:</strong> <fmt:formatNumber
-                                                            value="<%=orderDetail.getAmount()%>" type="number"
+                                                            value="<%=orderDetail.getAmount()*orderDetail.getQuantity()%>" type="number"
                                                             pattern="#,##0"/> VNĐ</p>
                                                     <%
                                                         }

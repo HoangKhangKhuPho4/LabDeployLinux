@@ -24,4 +24,5 @@ public class User {
     // 2FA
     private String secretKey;
     private boolean twoFaEnabled;
+    private String picture;
 }

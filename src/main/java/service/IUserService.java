@@ -1,6 +1,6 @@
 package service;
 
-import model.User;  // Chuyển về package model (chữ thường)
+import model.User;
 import java.util.List;
 
 public interface IUserService {
@@ -16,9 +16,8 @@ public interface IUserService {
     void deleteById(Integer id); // đổi sang Integer cho thống nhất
     boolean update(User user);
     void add(User user, String role);
-
-    void addGoogleUser(User newUser);
-
+    boolean addGoogleUser(User newUser);
+    User getByOAuthUser(String id);
     String createId(); // Có thể bỏ nếu bạn đã dùng auto_increment
     boolean isUserLocked(String username);
 }
