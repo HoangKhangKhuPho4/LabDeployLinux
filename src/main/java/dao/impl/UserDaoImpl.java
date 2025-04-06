@@ -29,10 +29,14 @@
                                 .bind(4, user.getOauthToken())     // Có thể null
                                 .bind(5, user.getName())
                                 .bind(6, user.getEmail())
-                                .bind(7, user.getRoleId())
-                                .bind(8, user.getCreatedAt())
-                                .bind(9, user.getUpdatedAt())
-                                .bind(10, user.getStatus())
+                                .bind(7, user.getPhone()) // Bind số điện thoại
+                                .bind(8, user.getBirth())   // Bind ngày sinh
+                                .bind(9, user.getGender())  // Bind giới tính
+                                .bind(10, user.getAddress()) // Bind địa chỉ
+                                .bind(11, user.getRoleId())
+                                .bind(12, user.getCreatedAt())
+                                .bind(13, user.getUpdatedAt())
+                                .bind(14, user.getStatus())
                                 .execute();
                     });
                     return rowsAffected > 0;
@@ -140,6 +144,7 @@
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
+                    // Có thể log lỗi chi tiết hơn ở đây
                 }
             }
 

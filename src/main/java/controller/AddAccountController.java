@@ -11,7 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet(value = "/account/add")
 public class AddAccountController extends HttpServlet {
@@ -45,19 +47,34 @@ public class AddAccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.findAndRegisterModules(); // Hỗ trợ LocalDate, LocalDateTime
 
         try {
             // Chuyển đổi request parameter sang User model
-            User user = mapper.readValue(req.getInputStream(), User.class);
+            User user = new User();
 
-            // Set thêm thông tin mặc định (nếu cần)
-            user.setRoleId(Integer.parseInt(req.getParameter("role")));
-            user.setStatus(1); // trạng thái mặc định kích hoạt
-            user.setCreatedAt(LocalDateTime.now());
-            user.setUpdatedAt(LocalDateTime.now());
-
+            user.setUsername(req.getParameter("user"));
+            user.setPassword(req.getParameter("password"));
+            user.setName(req.getParameter("name"));
+            user.setEmail(req.getParameter("email"));
+            user.setPhone(req.getParameter("phone")); // Lấy số điện thoại
+            String birthDateStr = req.getParameter("birth");
+            if (birthDateStr != null && !birthDateStr.isEmpty()) {
+                user.setBirth(LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_DATE)); // Lấy và parse ngày sinh
+            }
+            user.setGender(req.getParameter("gender")); // Lấy giới tính
+            user.setAddress(req.getParameter("address")); // Lấy địa chỉ
+            user.setRoleId(Integer.parseInt(req.getParameter("role"))); // Giả sử "role" là ID của role
+            user.setStatus(1); // Trạng thái mặc định là kích hoạt
+            // Kiểm tra sự tồn tại của email và username
+            if (userService.isEmailExists(user.getEmail()) || userService.isUsernameExists(user.getUsername())) {
+                resp.getWriter().write("Email hoặc username đã tồn tại.");
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+            // Thêm người dùng vào cơ sở dữ liệu
             userService.add(user, req.getParameter("role"));
             resp.sendRedirect("/quanlytaikhoan");
         } catch (Exception e) {

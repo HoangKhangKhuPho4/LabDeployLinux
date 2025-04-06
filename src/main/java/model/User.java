@@ -3,6 +3,8 @@ package model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,6 +19,10 @@ public class User {
     private String oauthToken;
     private String name;
     private String email;
+    private String phone; // Thêm trường số điện thoại
+    private LocalDate birth; // Thêm trường ngày sinh
+    private String gender; // Thêm trường giới tính
+    private String address;
     private Integer roleId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

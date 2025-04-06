@@ -20,10 +20,13 @@ public class DeleteAccountController extends HttpServlet {
         try {
             Integer id = Integer.parseInt(idParam);
             userService.deleteById(id);
+            resp.sendRedirect("/quanlytaikhoan?success=delete"); // Redirect với thông báo thành công
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            resp.sendRedirect("/quanlytaikhoan?error=invalidId"); // Redirect với thông báo lỗi ID
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendRedirect("/quanlytaikhoan?error=deleteFailed"); // Redirect với thông báo lỗi chung
         }
-
-        resp.sendRedirect("/quanlytaikhoan");
     }
 }
