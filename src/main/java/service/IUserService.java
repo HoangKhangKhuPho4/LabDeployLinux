@@ -14,7 +14,7 @@ public interface IUserService {
     void resetPass(String email, String password);
     List<User> findAll();
     void deleteById(Integer id); // đổi sang Integer cho thống nhất
-    void update(User user);
+    boolean update(User user);
     void add(User user, String role);
 
     void addGoogleUser(User newUser);

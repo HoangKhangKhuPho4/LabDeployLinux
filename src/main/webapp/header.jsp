@@ -12,6 +12,17 @@
 <head>
     <title>Header</title>
     <link rel="icon" type="image/png" href="./img/logo.png"/>
+    <style>
+        .auth-link {
+            color: #fff;              /* Màu trắng */
+            font-size: 14px;          /* Kích thước nhỏ hơn */
+            margin-right: 15px;       /* Khoảng cách giữa các liên kết */
+            text-decoration: none;    /* Bỏ gạch chân nếu có */
+        }
+        .auth-link:last-child {
+            margin-right: 0;
+        }
+    </style>
 </head>
 <body>
 <!-- HEADER -->
@@ -26,16 +37,14 @@
             </ul>
             <ul class="header-links pull-right">
                 <c:set var="user" value="${sessionScope.user}" />
-                <c:choose>
-                    <c:when test="${user != null and user['class'].simpleName == 'User'}">
-                        <li><a href="user-information.jsp?id=${user.id}"><i class="fa fa-user-o"></i> ${user.name}</a></li>
-                        <li><a href="logout"><i class="fa fa-user-o"></i> Đăng xuất</a></li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href="dangky.jsp"><i class="fa fa-user-o"></i> Đăng kí</a></li>
-                        <li><a href="dangnhap.jsp"><i class="fa fa-user-o"></i> Đăng nhập</a></li>
-                    </c:otherwise>
-                </c:choose>
+                <c:if test="${not empty user}">
+                    <a href="profile?userId=${user.id}" class="auth-link"><i class="fa fa-user-o"></i> ${user.name}</a>
+                    <a href="logout" class="auth-link"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
+                </c:if>
+                <c:if test="${empty user}">
+                    <a href="dangky.jsp" class="auth-link"><i class="fa fa-user-o"></i> Đăng kí</a>
+                    <a href="dangnhap.jsp" class="auth-link"><i class="fa fa-user-o"></i> Đăng nhập</a>
+                </c:if>
             </ul>
         </div>
     </div>

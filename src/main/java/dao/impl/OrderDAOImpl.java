@@ -145,15 +145,16 @@ public class OrderDAOImpl implements IOrderDAO {
 
     public static void main(String[] args) {
         OrderDAOImpl dao = new OrderDAOImpl();
-//        List<Order> all = dao.findByIdUser(15);
-//        for (Order order : all) {
-//            System.out.println(order);
-//        }
-        LocalDateTime orderDate = LocalDateTime.now();
-        LocalDateTime deliverDate = orderDate.plusDays(3);
-        Order order = new Order(3, new User(15, null, null, null, null,
-                null, null, null, null, null, null, null), "DHNL", "0774642187", "Đang giao hàng", "", "Thanh toán khi nhận hàng",
-                orderDate, deliverDate, 690000.0);
-        System.out.println(dao.updateOrder(order));
-    }
+////        List<Order> all = dao.findByIdUser(15);
+////        for (Order order : all) {
+////            System.out.println(order);
+////        }
+////        LocalDateTime orderDate = LocalDateTime.now();
+////        LocalDateTime deliverDate = orderDate.plusDays(3);
+////        Order order = new Order(3, new User(15, null, null, null, null,
+////                null, null, null, null, null, null, null), "DHNL", "0774642187", "Đang giao hàng", "", "Thanh toán khi nhận hàng",
+////                orderDate, deliverDate, 690000.0);
+////        System.out.println(dao.updateOrder(order));
+//
+}
 }
