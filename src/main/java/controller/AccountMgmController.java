@@ -1,8 +1,5 @@
 package controller;
 
-import service.IUserService;
-import service.impl.UserServiceImpl;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

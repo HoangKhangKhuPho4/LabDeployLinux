@@ -1,9 +1,6 @@
 package controller;
 
-import model.User;
 import org.mindrot.jbcrypt.BCrypt;
-import service.IUserService;
-import service.impl.UserServiceImpl;
 import utils.SessionUtil;
 import utils.TwoFactorAuth;
 

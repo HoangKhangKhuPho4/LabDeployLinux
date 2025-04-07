@@ -4,7 +4,6 @@ import dao.IProductTypeDAO;
 import dao.impl.ProductTypeDAOImpl;
 import model.Product;
 import model.ProductType;
-import model.User;
 import service.IProductService;
 import service.impl.ProductServiceImpl;
 import utils.SessionUtil;

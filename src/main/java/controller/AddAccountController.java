@@ -1,9 +1,6 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.User;
-import service.IUserService;
-import service.impl.UserServiceImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet(value = "/account/add")

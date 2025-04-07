@@ -1,6 +1,5 @@
 package controller;
 
-import model.User;
 import utils.SessionUtil;
 import utils.TwoFactorAuth;
 
