@@ -1,6 +1,7 @@
 package dao;
 
 import model.User;
+
 import java.util.List;
 
 public interface IUserDao {
@@ -16,6 +17,6 @@ public interface IUserDao {
     void deleteById(Integer id);
     boolean update(User user);
     User isUserExists(String oauthProvider, String oauthUid);
-    User getByOAuthUser(String oauthUid);
-    boolean addGoogleUser(User user);
+
+    boolean addGoogleUser(User newUser);
 }

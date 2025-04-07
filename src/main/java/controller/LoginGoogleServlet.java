@@ -30,7 +30,6 @@ public class LoginGoogleServlet extends HttpServlet {
         // Lấy access token và thông tin người dùng từ Google
         String accessToken = GoogleUtils.getToken(code);
         GoogleAccount googlePojo = GoogleUtils.getUserInfo(accessToken);
-
         // Kiểm tra xem người dùng này đã tồn tại trong DB hay chưa theo oauth_uid
         User existingUser = userService.getByOAuthUser(googlePojo.getId());
         if (existingUser == null) {
@@ -75,4 +74,3 @@ public class LoginGoogleServlet extends HttpServlet {
         doGet(request, response);
     }
 }
-
