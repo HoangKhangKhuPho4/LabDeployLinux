@@ -7,6 +7,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.User;
+import service.IUserService;
+import service.impl.UserServiceImpl;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -55,13 +59,13 @@ public class AddAccountController extends HttpServlet {
             user.setPassword(req.getParameter("password"));
             user.setName(req.getParameter("name"));
             user.setEmail(req.getParameter("email"));
-            user.setPhone(req.getParameter("phone")); // Lấy số điện thoại
+//            user.setPhone(req.getParameter("phone")); // Lấy số điện thoại
             String birthDateStr = req.getParameter("birth");
             if (birthDateStr != null && !birthDateStr.isEmpty()) {
-                user.setBirth(LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_DATE)); // Lấy và parse ngày sinh
+//                user.setBirth(LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_DATE)); // Lấy và parse ngày sinh
             }
-            user.setGender(req.getParameter("gender")); // Lấy giới tính
-            user.setAddress(req.getParameter("address")); // Lấy địa chỉ
+//            user.setGender(req.getParameter("gender")); // Lấy giới tính
+//            user.setAddress(req.getParameter("address")); // Lấy địa chỉ
             user.setRoleId(Integer.parseInt(req.getParameter("role"))); // Giả sử "role" là ID của role
             user.setStatus(1); // Trạng thái mặc định là kích hoạt
             // Kiểm tra sự tồn tại của email và username

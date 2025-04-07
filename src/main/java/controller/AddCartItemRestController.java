@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.JsonObject;
+import model.User;
 import model.cart.CartItem;
 import service.ICartService;
 import service.impl.CartServiceImpl;

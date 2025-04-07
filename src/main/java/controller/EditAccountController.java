@@ -1,7 +1,10 @@
 package controller;
 
+import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import service.IUserService;
+import service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,14 +41,14 @@ public class EditAccountController extends HttpServlet {
             existingUser.setName(req.getParameter("name"));
             existingUser.setEmail(req.getParameter("email"));
             existingUser.setUsername(req.getParameter("user"));
-            existingUser.setPhone(req.getParameter("phone"));
-            existingUser.setAddress(req.getParameter("address"));
+//            existingUser.setPhone(req.getParameter("phone"));
+//            existingUser.setAddress(req.getParameter("address"));
 
             String birthDateStr = req.getParameter("date");
             if (birthDateStr != null && !birthDateStr.isEmpty()) {
-                existingUser.setBirth(LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_DATE));
+//                existingUser.setBirth(LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_DATE));
             }
-            existingUser.setGender(req.getParameter("gender"));
+//            existingUser.setGender(req.getParameter("gender"));
 
             String newPassword = req.getParameter("password");
             if (newPassword != null && !newPassword.isEmpty() && !BCrypt.checkpw(newPassword, existingUser.getPassword())) {

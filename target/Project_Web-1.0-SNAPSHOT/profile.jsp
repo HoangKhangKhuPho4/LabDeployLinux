@@ -1,33 +1,29 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Phù hợp mọi loại màn hình -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="./img/logo.png" type="image/x-icon"/>
-
     <title>Hồ Sơ Của Tôi</title>
-
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
     <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
-
     <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="css/slick.css"/>
     <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papN8Auqwsb5Jnu3hU0MGLuedlitO+lQ9B+8R4zbmlF+M8sN+IN0KjhWtmjSel6BxGR+N4e244MQ7vq6QQP2mw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-papN8Auqwsb5Jnu3hU0MGLuedlitO+lQ9B+8R4zbmlF+M8sN+IN0KjhWtmjSel6BxGR+N4e244MQ7vq6QQP2mw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
-
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <!-- stlylesheet -->
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
     <link rel="icon" href="./img/logo.png" type="image/x-icon"/>
@@ -38,23 +34,19 @@
     <script src="js/slick.min.js"></script>
     <script src="js/nouislider.min.js"></script>
     <script src="js/jquery.zoom.min.js"></script>
-
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="css/font-awesome.min.css"/>
-    <!-- CSS cho phần Profile. Lưu ý: các style này chỉ áp dụng trong phần nội dung chính để không làm ảnh hưởng đến header, menu, footer -->
     <style>
-        /* Container của profile được giới hạn với class .profile-container */
+        /* Các style CSS dành riêng cho trang Profile */
         .profile-container {
             display: flex;
-            flex-wrap: wrap; /* Hỗ trợ màn hình nhỏ */
+            flex-wrap: wrap;
             gap: 20px;
             margin: 20px auto;
             max-width: 1200px;
             padding: 20px;
         }
-
-        /* Sidebar Profile */
         .profile-container .sidebar {
             flex: 0 0 250px;
             background-color: #ffffff;
@@ -115,8 +107,6 @@
         .profile-container .sidebar a.active i {
             color: #fff;
         }
-
-        /* Content Profile */
         .profile-container .content {
             flex: 1;
             background-color: #fff;
@@ -129,8 +119,6 @@
         .profile-container .content:hover {
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-
-        /* Profile Header */
         .profile-container .profile-header {
             display: flex;
             justify-content: space-between;
@@ -149,8 +137,6 @@
             font-size: 14px;
             color: #666;
         }
-
-        /* Form Styles */
         .profile-container .form-group {
             margin-bottom: 20px;
         }
@@ -171,8 +157,6 @@
             font-size: 14px;
             box-sizing: border-box;
         }
-
-        /* Save Button */
         .profile-container .save-button {
             background-color: #ff5722;
             color: #fff;
@@ -186,8 +170,6 @@
         .profile-container .save-button:hover {
             background-color: #e64a19;
         }
-
-        /* Avatar Upload */
         .profile-container .avatar-upload {
             margin-top: 20px;
             text-align: center;
@@ -205,8 +187,6 @@
         .profile-container .avatar-upload button:hover {
             background-color: #5b4886;
         }
-
-        /* Responsive adjustments: Sidebar full width trên màn hình nhỏ */
         @media (max-width: 768px) {
             .profile-container {
                 flex-direction: column;
@@ -214,6 +194,20 @@
             .profile-container .sidebar {
                 width: 100%;
             }
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .avatar-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -227,9 +221,7 @@
 <jsp:include page="menu.jsp"/>
 <!-- /MENU -->
 
-<!-- PHẦN NỘI DUNG CHÍNH của Profile -->
 <div class="profile-container">
-    <!-- Sidebar Profile -->
     <div class="sidebar">
         <div class="section-title"><i class="fas fa-address-card"></i> Tài Khoản</div>
         <ul>
@@ -254,76 +246,105 @@
         </ul>
     </div>
 
-
-
-    <!-- Content Profile -->
     <div class="content">
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <div class="profile-info">
-                <h2 class="profile-title">Hồ Sơ Của Tôi</h2>
-                <c:choose>
-                    <c:when test="${user.twoFaEnabled}">
-                        <p class="text-success" style="font-size:16px;">
-                            Xác thực hai lớp (2FA) đã được bật.
+        <h2 class="profile-title">Hồ Sơ Của Tôi</h2>
+        <c:choose>
+            <c:when test="${user.twoFaEnabled}">
+                <p class="text-success" style="font-size:16px;">Xác thực hai lớp (2FA) đã được bật.</p>
+            </c:when>
+            <c:otherwise>
+                <p class="text-warning" style="font-size:16px;">
+                    Bạn chưa bật xác thực hai lớp (2FA). Vui lòng nhấn vào
+                    <a href="changePassword" style="color:#ff5722; font-weight:bold;">Đổi Mật Khẩu</a> để kích hoạt.
+                </p>
+            </c:otherwise>
+        </c:choose>
+        <p class="profile-subtitle">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+
+        <div class="row">
+            <div class="col-md-8">
+                <form action="updateProfile" method="post">
+                    <div class="form-group">
+                        <label class="form-label">OAuth User ID</label>
+                        <input type="text" name="id" value="${user.oauthUid}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên đăng nhập</label>
+                        <input type="text" name="username" value="${user.username}" readonly>
+                        <small>Tên đăng nhập chỉ có thể thay đổi một lần.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên</label>
+                        <input type="text" name="name" placeholder="Nhập tên của bạn" value="${user.name}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" value="${user.email}" readonly>
+                        <a href="#" style="color: blue;">Thay Đổi</a>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" name="phone" placeholder="Số điện thoại (nếu có)" value="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giới tính</label>
+                        <div>
+                            <label><input type="radio" name="gender" value="Nam"> Nam</label>
+                            <label style="margin-left: 20px;"><input type="radio" name="gender" value="Nữ"> Nữ</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày sinh</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select class="form-control">
+                                    <option>Ngày</option>
+                                    <!-- Option ngày... -->
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control">
+                                    <option>Tháng</option>
+                                    <!-- Option tháng... -->
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control">
+                                    <option>Năm</option>
+                                    <!-- Option năm... -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="save-button">Lưu</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <c:choose>
+                        <c:when test="${not empty user.picture}">
+                            <img src="${user.picture}" alt="Avatar" class="avatar-img">
+                        </c:when>
+                        <c:otherwise>
+                            <div style="width:100px; height:100px; border-radius:50%; background-color:#ccc;
+                                    display:flex; align-items:center; justify-content:center;
+                                    font-size:36px; color:#fff; margin:0 auto;">
+                                    ${fn:substring(user.name, 0, 1)}
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="avatar-upload" style="margin-top: 20px;">
+                        <button type="button">Chọn Ảnh</button>
+                        <p style="margin-top:10px;">
+                            Dung lượng file tối đa: 1 MB<br>
+                            Dạng file: JPEG, PNG
                         </p>
-                    </c:when>
-                    <c:otherwise>
-                        <p class="text-warning" style="font-size:16px;">
-                            Bạn chưa bật xác thực hai lớp (2FA). Vui lòng nhấn vào
-                            <a href="changePassword" style="color:#ff5722; font-weight:bold;">Đổi Mật Khẩu</a> để kích hoạt.
-                        </p>
-                    </c:otherwise>
-                </c:choose>
-                <p class="profile-subtitle">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                    </div>
+                </div>
             </div>
-            <div class="profile-avatar">
-                <c:choose>
-                    <c:when test="${not empty user.name}">
-                        ${fn:substring(user.name, 0, 1)}
-                    </c:when>
-                    <c:otherwise>
-                        U
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-
-        <!-- Form Edit Profile -->
-        <form action="updateProfile" method="post">
-            <div class="form-group">
-                <label class="form-label">Tên đăng nhập</label>
-                <input type="text" name="username" value="${user.username}" readonly>
-                <small>Tên đăng nhập chỉ có thể thay đổi một lần.</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Tên</label>
-                <input type="text" name="name" placeholder="Nhập tên của bạn" value="${user.name}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" value="${user.email}" readonly>
-                <a href="#" style="color: blue;">Thay Đổi</a>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Số điện thoại</label>
-                <!-- Nếu có dữ liệu số điện thoại có thể hiển thị ở đây -->
-            </div>
-
-            <button type="submit" class="save-button">Lưu</button>
-        </form>
-
-        <!-- Avatar Upload -->
-        <div class="avatar-upload">
-            <button type="button">Chọn Ảnh</button>
-            <p>Dung lượng file tối đa: 1 MB<br>Dạng file: JPEG, PNG</p>
         </div>
     </div>
 </div>
-<!-- /PHẦN NỘI DUNG CHÍNH -->
 
 <!-- FOOTER -->
 <jsp:include page="footer.jsp"/>
