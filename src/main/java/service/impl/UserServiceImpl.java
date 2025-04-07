@@ -23,7 +23,6 @@ public class UserServiceImpl implements IUserService {
         return BCrypt.checkpw(password, user.getPassword());
     }
 
-
     @Override
     public String register(User user) {
         // Băm mật khẩu trước khi lưu
@@ -91,8 +90,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteById(Integer id) {
-
+        // TODO: triển khai nếu cần
     }
+
     @Override
     public boolean update(User user) {
         try {
@@ -114,7 +114,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void add(User user, String role) {
-
+        // TODO: triển khai nếu cần
     }
 
     @Override
@@ -130,11 +130,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User getByOAuthUser(String id) {
-        return null;
-    }
-
-    @Override
     public String createId() {
         return UUID.randomUUID().toString();
     }
@@ -142,5 +137,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean isUserLocked(String username) {
         return false;
+    }
+
+    @Override
+    public User getByOAuthUser(String id) {
+        IUserDao userDao = new UserDaoImpl();
+        return userDao.getByOAuthUser(id);
     }
 }
