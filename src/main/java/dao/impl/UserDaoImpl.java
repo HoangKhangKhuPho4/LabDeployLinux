@@ -20,8 +20,7 @@ public class UserDaoImpl implements IUserDao {
     public boolean register(User user) {
         try {
             int rowsAffected = JDBIConnector.getConnect().withHandle(handle -> {
-                // Câu truy vấn theo cấu trúc trong bảng users:
-                return handle.createUpdate("INSERT INTO users(username, password, oauth_provider, oauth_uid, oauth_token, name, email, role_id, created_at, updated_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                return handle.createUpdate("INSERT INTO users(username, password, oauth_provider, oauth_uid, oauth_token, name, email, picture, role_id, created_at, updated_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                         .bind(0, user.getUsername())
                         .bind(1, user.getPassword())
                         .bind(2, user.getOauthProvider())  // Có thể null
@@ -29,11 +28,11 @@ public class UserDaoImpl implements IUserDao {
                         .bind(4, user.getOauthToken())     // Có thể null
                         .bind(5, user.getName())
                         .bind(6, user.getEmail())
-                        .bind(7, user.getRoleId())
-                        .bind(8, user.getCreatedAt())
-                        .bind(9, user.getUpdatedAt())
-                        .bind(10, user.getStatus())
-                        .bind(11, user.getPicture())
+                        .bind(7, user.getPicture())  // Giá trị cho cột picture
+                        .bind(8, user.getRoleId())
+                        .bind(9, user.getCreatedAt())
+                        .bind(10, user.getUpdatedAt())
+                        .bind(11, user.getStatus())
                         .execute();
             });
             return rowsAffected > 0;
