@@ -70,4 +70,6 @@ public class ProductTypeDAOImpl implements IProductTypeDAO {
         return rowsAffected > 0;
     }
 
+
+
 }

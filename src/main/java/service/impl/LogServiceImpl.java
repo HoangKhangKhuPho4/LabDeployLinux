@@ -1,14 +1,18 @@
 package service.impl;
 
+import dao.ILogDAO;
+import dao.impl.LogDAOImpl;
+import model.Log;
 import service.ILogService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.*;
 
 public class LogServiceImpl implements ILogService {
     private static final Logger logger = Logger.getLogger(LogServiceImpl.class.getName());
-
+    private ILogDAO logDAO = new LogDAOImpl();
     static {
         try {
             // File handler ghi log vào file
@@ -54,6 +58,21 @@ public class LogServiceImpl implements ILogService {
     // Phương thức ghi log lỗi
     public void error(String message) {
         logger.severe(getFormattedMessage("ERROR", message));
+    }
+
+    @Override
+    public Log save(Log log) {
+        return logDAO.save(log);
+    }
+
+    @Override
+    public List<Log> findAll() {
+        return logDAO.findAll();
+    }
+
+    @Override
+    public List<Log> findByUserId(int userId) {
+        return logDAO.findByUserId(userId);
     }
 
     // Phương thức ghi log lỗi kèm Exception
