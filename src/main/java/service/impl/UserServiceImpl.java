@@ -25,13 +25,21 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public String register(User user) {
-        // Băm mật khẩu trước khi lưu
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        user.setPassword(hashedPassword);
-        IUserDao userDao = new UserDaoImpl();
-        boolean result = userDao.register(user);
-        return result ? "registered" : null;
+        try {
+            // Băm mật khẩu trước khi lưu
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            user.setPassword(hashedPassword);
+            IUserDao userDao = new UserDaoImpl();
+            boolean result = userDao.register(user);
+
+            System.out.println("Đăng ký user? " + result);
+            return result ? "registered" : null;
+        } catch (Exception e) {
+            e.printStackTrace(); // In lỗi cụ thể
+            return null;
+        }
     }
+
 
     @Override
     public boolean isUsernameExists(String username) {
