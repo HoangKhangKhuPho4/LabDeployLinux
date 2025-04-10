@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.JsonObject;
 import model.User;
+import model.cart.Cart;
 import model.cart.CartItem;
 import service.ICartService;
 import service.impl.CartServiceImpl;
@@ -31,21 +32,28 @@ public class AddCartItemRestController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        String id = request.getParameter("productId");
+
         Integer productId = Integer.parseInt(request.getParameter("productId"));
         User user = (User) SessionUtil.getInstance().getKey(request, "user");
 
-
-        if(user == null) {
+        if (user == null) {
             response.setStatus(400);
             response.getWriter().print("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng!");
             return;
         }
 
         Integer userId = user.getId();
-        Integer cartId = cartService.findByUserId(userId).getId();
+        Cart cart = cartService.findByUserId(userId);
 
-        if (productId != null && userId != null && cartId != null) {
+        // ✅ Nếu chưa có cart, thì tạo mới
+        if (cart == null) {
+            cartService.createCart(userId);
+            cart = cartService.findByUserId(userId); // lấy lại cart vừa tạo
+        }
+
+        Integer cartId = cart.getId();
+
+        if (productId != null && cartId != null) {
             CartItem cartItem = new CartItem();
             cartItem.setId(UUID.randomUUID().toString());
             cartItem.setCartId(cartId);

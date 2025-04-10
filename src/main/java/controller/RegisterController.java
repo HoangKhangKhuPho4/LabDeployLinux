@@ -4,6 +4,7 @@ import model.User;
 import service.IUserService;
 import service.impl.UserServiceImpl;
 import utils.MailUtil;
+import utils.SessionUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,8 +56,7 @@ public class RegisterController extends HttpServlet {
                 user.setStatus(1); // trạng thái kích hoạt
 
                 // Lưu user vào session với key "user"
-                HttpSession session = req.getSession();
-                session.setAttribute("user", user);
+                SessionUtil.getInstance().putKey(req, "user", user);
 
                 // Tạo mã xác thực
                 Random random = new Random();
@@ -66,7 +66,7 @@ public class RegisterController extends HttpServlet {
                 MailUtil.getInstance().sendMail("Mã code của bạn: " + code, "Mã xác thực tài khoản", email);
 
                 // Lưu mã OTP vào session với key "codes"
-                session.setAttribute("codes", code);
+                SessionUtil.getInstance().putKey(req, "codes", code);
                 // Chuyển hướng đến trang nhập mã xác thực
                 resp.sendRedirect("entercode");
             }

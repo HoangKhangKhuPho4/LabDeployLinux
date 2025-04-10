@@ -128,14 +128,6 @@
 	var priceInputMax = document.getElementById('price-max'),
 			priceInputMin = document.getElementById('price-min');
 
-	priceInputMax.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
-	priceInputMin.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
 	function updatePriceSlider(elem , value) {
 		if ( elem.hasClass('price-min') ) {
 			console.log('min')
@@ -166,7 +158,6 @@
 	}
 
 })(jQuery);
-
 $(document).ready(function () {
 	$('.add-to-cart-btn').click(function () {
 		const productId = $(this).data('product');
@@ -178,19 +169,18 @@ $(document).ready(function () {
 			},
 			success: function (data) {
 				$('#cart-quantity').text(data.message);
-
 				Toastify({
 					text: data.status,
 					duration: 3000,
 					newWindow: true,
 					close: true,
-					gravity: "top", // `top` or `bottom`
-					position: "right", // `left`, `center` or `right`
-					stopOnFocus: true, // Prevents dismissing of toast on hover
+					gravity: "top",
+					position: "right",
+					stopOnFocus: true,
 					style: {
 						background: "green",
 					},
-					onClick: function(){} // Callback after click
+					onClick: function(){}
 				}).showToast();
 			},
 			error: function (data) {
