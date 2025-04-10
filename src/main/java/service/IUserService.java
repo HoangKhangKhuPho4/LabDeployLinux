@@ -20,4 +20,5 @@ public interface IUserService {
     User getByOAuthUser(String id);
     String createId(); // Có thể bỏ nếu bạn đã dùng auto_increment
     boolean isUserLocked(String username);
+    boolean addFacebookUser(User newUser);
 }

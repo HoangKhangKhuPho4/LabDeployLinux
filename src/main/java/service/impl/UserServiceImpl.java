@@ -129,6 +129,19 @@ public class UserServiceImpl implements IUserService {
         return result;
     }
 
+    // Phương thức bổ sung để thêm tài khoản Facebook vào DB
+    @Override
+    public boolean addFacebookUser(User newUser) {
+        IUserDao userDao = new UserDaoImpl();
+        boolean result = userDao.addFacebookUser(newUser);
+        if(result) {
+            System.out.println("Facebook user registration successful");
+        } else {
+            System.err.println("Facebook user registration failed");
+        }
+        return result;
+    }
+
     @Override
     public String createId() {
         return UUID.randomUUID().toString();
