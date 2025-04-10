@@ -216,4 +216,48 @@ public class UserDaoImpl implements IUserDao {
         });
         return rowsAffected > 0;
     }
+    @Override
+    public boolean addFacebookUser(User user) {
+        try {
+            // Kiểm tra xem người dùng với oauth_uid đã tồn tại chưa
+            User existingUser = getByOAuthUser(user.getOauthUid());
+            if (existingUser != null) {
+                // Nếu đã tồn tại, cập nhật lại thông tin mới (oauthToken, name, email, picture, updated_at)
+                int rowsAffected = JDBIConnector.getConnect().withHandle(handle -> {
+                    return handle.createUpdate("UPDATE users SET oauth_token = ?, name = ?, email = ?, picture = ?, updated_at = ? WHERE id = ?")
+                            .bind(0, user.getOauthToken())
+                            .bind(1, user.getName())
+                            .bind(2, user.getEmail())
+                            .bind(3, user.getPicture())
+                            .bind(4, user.getUpdatedAt())
+                            .bind(5, existingUser.getId())
+                            .execute();
+                });
+                return rowsAffected > 0;
+            } else {
+                // Nếu chưa tồn tại, tiến hành INSERT bản ghi mới
+                int rowsAffected = JDBIConnector.getConnect().withHandle(handle -> {
+                    return handle.createUpdate("INSERT INTO users(username, password, oauth_provider, oauth_uid, oauth_token, name, email, picture, role_id, created_at, updated_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                            .bind(0, user.getUsername())
+                            .bind(1, user.getPassword())
+                            .bind(2, user.getOauthProvider())
+                            .bind(3, user.getOauthUid())
+                            .bind(4, user.getOauthToken())
+                            .bind(5, user.getName())
+                            .bind(6, user.getEmail())
+                            .bind(7, user.getPicture())
+                            .bind(8, user.getRoleId())
+                            .bind(9, user.getCreatedAt())
+                            .bind(10, user.getUpdatedAt())
+                            .bind(11, user.getStatus())
+                            .execute();
+                });
+                return rowsAffected > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

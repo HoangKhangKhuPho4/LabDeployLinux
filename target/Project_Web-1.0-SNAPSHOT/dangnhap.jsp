@@ -62,7 +62,8 @@
     </form>
     <div class="social-login">
         <div class="social-buttons">
-            <button type="button" class="facebook-btn" onclick="window.location.href='/your-app/facebook-login'">
+            <!-- Cập nhật URL redirect cho Facebook sử dụng giao thức HTTPS và port 8443 -->
+            <button type="button" class="facebook-btn" onclick="window.location.href='https://www.facebook.com/dialog/oauth?client_id=1675975133288218&redirect_uri=https://localhost:8443/Project_Web_war/login-facebook&scope=email'">
                 <i class="fab fa-facebook-f"></i> Đăng nhập với Facebook
             </button>
             <button type="button" class="google-btn" onclick="window.location.href='https://accounts.google.com/o/oauth2/auth?scope=openid%20email%20profile&redirect_uri=http://localhost:8080/Project_Web_war/google-callback&response_type=code&client_id=676076034879-g16cni1a76vt4bcvb49vvtq0ogqrfi5b.apps.googleusercontent.com'">

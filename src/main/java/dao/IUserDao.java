@@ -18,4 +18,5 @@ public interface IUserDao {
     User isUserExists(String oauthProvider, String oauthUid);
     User getByOAuthUser(String oauthUid);
     boolean addGoogleUser(User user);
+    boolean addFacebookUser(User user);
 }

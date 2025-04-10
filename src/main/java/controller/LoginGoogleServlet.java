@@ -22,7 +22,7 @@ public class LoginGoogleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
         if (code == null || code.isEmpty()) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("accessDenied.jsp");
             dispatcher.forward(request, response);
             return;
         }
