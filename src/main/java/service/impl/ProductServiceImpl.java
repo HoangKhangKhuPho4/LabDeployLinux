@@ -82,18 +82,19 @@ public class ProductServiceImpl implements IProductService {
         ProductServiceImpl productService = new ProductServiceImpl();
         Product product = productService.findProductById(1);
 
-        System.out.println("Product ID: " + product.getId());
-        System.out.println("Product Name: " + product.getName());
-        System.out.println("Product Price: " + product.getPrice());
-        System.out.println("Product Detail: " + product.getDetail());
-        if (product.getImages() != null && !product.getImages().isEmpty()) {
-            System.out.println("Images:");
-            for (Image image : product.getImages()) {
-                System.out.println("  Image ID: " + image.getId());
-                System.out.println("  Image Link: " + image.getLinkImage());
-            }
-        }
-        System.out.println("---------------------------");
+        System.out.println(productService.findNewProduct());
+//        System.out.println("Product ID: " + product.getId());
+//        System.out.println("Product Name: " + product.getName());
+//        System.out.println("Product Price: " + product.getPrice());
+//        System.out.println("Product Detail: " + product.getDetail());
+//        if (product.getImages() != null && !product.getImages().isEmpty()) {
+//            System.out.println("Images:");
+//            for (Image image : product.getImages()) {
+//                System.out.println("  Image ID: " + image.getId());
+//                System.out.println("  Image Link: " + image.getLinkImage());
+//            }
+//        }
+//        System.out.println("---------------------------");
 
     }
 

@@ -27,6 +27,7 @@ public class Type extends HttpServlet {
         ProductType productType = productTypeDAO.findById(productTypeId);
         List<Product> listProducts = productService.findByCategory(productTypeId);
         User user = (User) SessionUtil.getInstance().getKey(request, "user");
+        request.setAttribute("listProducts", listProducts);
         request.getRequestDispatcher("danhmuctheoloaisanpham.jsp").forward(request, response);
     }
 

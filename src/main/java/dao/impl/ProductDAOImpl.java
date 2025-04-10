@@ -188,4 +188,10 @@ public class ProductDAOImpl implements IProductDAO {
         });
         return products;
     }
+
+    public static void main(String[] args) {
+        ProductDAOImpl p = new ProductDAOImpl();
+       // System.out.println(p.findAll());
+        System.out.println(p.findNewProduct());
+    }
 }
