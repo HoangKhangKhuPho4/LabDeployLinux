@@ -82,7 +82,7 @@
                     <div class="header-ctn">
                         <!-- cart -->
                         <div class="dropdown">
-                            <a class="dropdown-toggle" href="giohang.jsp">
+                            <a class="dropdown-toggle" href="display-cart">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ Hàng</span>
                                 <div id="cart-quantity" class="qty"><c:out value="${totalItem}"/></div>

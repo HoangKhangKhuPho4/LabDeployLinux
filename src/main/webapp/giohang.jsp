@@ -1,50 +1,34 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-    <title>Giỏ hàng</title>
-
-    <!-- Google font -->
+    <link rel="icon" href="./img/logo.png" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
-    <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
-
-    <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="css/slick.css"/>
     <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
-
-    <!-- nouislider -->
     <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
-
-    <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
-
-    <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
-
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/jquery.zoom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <title>Giỏ hàng</title>
 </head>
 <body>
-<!-- HEADER -->
 <jsp:include page="header.jsp"/>
-<!-- /HEADER -->
-
-<!-- MENU -->
 <jsp:include page="menu.jsp"/>
-<!-- /MENU -->
-
-<!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
-    <!-- container -->
     <div class="container">
-        <!-- row -->
         <div class="row">
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
@@ -53,13 +37,8 @@
                 </ul>
             </div>
         </div>
-        <!-- /row -->
     </div>
-    <!-- /container -->
 </div>
-<!-- /BREADCRUMB -->
-
-<!-- SECTION -->
 <div class="container main-section">
     <div class="row">
         <div class="col-lg-12 pl-3 pt-3">
@@ -94,6 +73,7 @@
                                        data-price="${item.product.price}"
                                        data-quantity="${item.quantity}"
                                        onchange="updateTotalAmount()" style="margin-left: -30px; position: absolute;">
+
                                 <div class="row">
                                     <div class="col-lg-2 Product-img">
                                         <img src="${item.product.images[0].linkImage}" alt=".   .."
@@ -105,10 +85,8 @@
                                         <p></p>
                                     </div>
                                 </div>
-
                                 <input type="hidden" name="${item.product.id}"
                                        value="${item.product.name}"/>
-
                             </td>
                             <fmt:formatNumber value="${item.product.price}" type="number" pattern="#,##0"
                                               var="formattedPrice"/>
@@ -116,45 +94,52 @@
                             <td data-th="Quantity">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" style="background: #5cb85c; border: none">
+                                        <button type="button" class="btn btn-sm btn-primary btn-minus"
+                                                style="background: #5cb85c; border: none">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control bg-secondary text-center" value="${item.quantity}">
+                                    <input type="text" class="form-control bg-secondary text-center"
+                                           value="${item.quantity}">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" style="background: #5cb85c; border: none">
+                                        <button type="button" class="btn btn-sm btn-primary btn-plus"
+                                                style="background: #5cb85c; border: none">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
-                            <fmt:formatNumber value="${item.product.price * item.quantity}" type="number" pattern="#,##0" var="formattedPrice1"/>
-                            <td id="subtotal-${item.product.id}"> <strong class="total-price">${formattedPrice1} VNĐ</strong></td>
-                            <td class="actions" data-th="" style="width:10%;"><p data-toggle="modal" data-product-id="${item.product.id}" data-target="#delete"
-                                                                                 class="btn btn-danger btn-sm delete-product"><i class="fa fa-trash-o"></i></p>
+                            <fmt:formatNumber value="${item.product.price * item.quantity}" type="number"
+                                              pattern="#,##0" var="formattedPrice1"/>
+                            <td id="subtotal-${item.product.id}"><strong class="total-price">${formattedPrice1}
+                                VNĐ</strong></td>
+                            <td class="actions" data-th="" style="width:10%;"><p data-toggle="modal"
+                                                                                 data-product-id="${item.product.id}"
+                                                                                 data-target="#delete"
+                                                                                 class="btn btn-danger btn-sm delete-product">
+                                <i class="fa fa-trash-o"></i></p>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td><a href="index.jsp" class="btn btn-success "> <i class="fa fa-angle-left"> </i> Tiếp tục mua sắm</a></td>
+                        <td><a href="index.jsp" class="btn btn-success "> <i class="fa fa-angle-left"> </i> Tiếp tục mua
+                            sắm</a></td>
                         <td colspan="2" class="hidden-xs"></td>
                         <td class="hidden-xs text-center" style="width:10%;">
-                            <fmt:formatNumber value="${totalPrice}" type="number" pattern="#,##0"
-                                              var="formattedPrice2"/>
-                            <span id="totalAmountLabel" style="font-weight: bold;"><strong>Tổng tiền : ${formattedPrice2}</strong></span>
+                            <span id="totalAmountLabel" style="font-weight: bold;">
+                            <strong>Tổng tiền : <fmt:formatNumber value="${totalPrice}" type="number" pattern="#,##0" /></strong>
+                            </span>
                         </td>
                         <td>
                             <input type="submit" id="paybutton" name="action" class="btn btn-success btn-block"
                                    value="Thanh toán">
-
                         </td>
                     </tr>
                     </tfoot>
                 </form>
             </table>
-            <!-- Delete-->
             <div id="delete" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -185,7 +170,6 @@
         }
     });
 
-    // Update quantity when clicking the plus button
     $('.btn-plus').click(function () {
         var input = $(this).closest('.input-group').find('input');
         var newValue = parseInt(input.val()) + 1;
@@ -194,7 +178,6 @@
         updateQuantity(productId, newValue);
     });
 
-    // Update quantity when manually entering the value
     $('.quantity input').change(function () {
         var newValue = parseInt($(this).val());
         if (newValue >= 1) {
@@ -213,7 +196,7 @@
             quantity: quantity
         };
         $.ajax({
-            url: '/home/update-quantity-cart-item',
+            url: '/update-quantity-cart-item',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -252,17 +235,28 @@
     }
 
     function updateTotalAmount() {
-        var totalAmount = 0;
-
-        $('input[name="selectedProductIds"]:checked').each(function () {
-            var price = parseFloat($(this).data('price'));
-            var quantity = parseInt($(this).data('quantity'));
-            totalAmount += price * quantity;
+        $.ajax({
+            url: '/cart/total', // đường dẫn servlet/controller xử lý
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Format tiền theo kiểu Việt Nam
+                var formattedAmount = new Intl.NumberFormat('vi-VN').format(data.totalAmount);
+                $('#totalAmountLabel').html('<strong>Tổng tiền : ' + formattedAmount + '</strong>');
+            },
+            error: function () {
+                console.error("Không thể cập nhật tổng tiền.");
+            }
         });
-
-        var formattedTotalAmount = formatter.format(totalAmount).replace(/₫/, ' VNĐ');
-        $('#totalAmountLabel').text('Tổng tiền: ' + formattedTotalAmount);
     }
+
+    // Gọi hàm khi số lượng thay đổi
+    $(document).ready(function () {
+        $('.form-control').on('change', function () {
+            // Có thể gửi thêm AJAX cập nhật số lượng tại đây nếu muốn
+            updateTotalAmount(); // Sau khi cập nhật, gọi hàm này
+        });
+    });
 
 </script>
 <script>
@@ -287,14 +281,12 @@
         }
     });
 
-    // Select all products
     $('#selectAll').on('change', function () {
         var isChecked = $(this).is(':checked');
         $('input[name="selectedProductIds"]').prop('checked', isChecked);
         updateTotalAmount();
     });
 
-    // Update total amount when selecting products
     $('input[name="selectedProductIds"]').on('change', function () {
         updateTotalAmount();
     });
