@@ -65,7 +65,7 @@
         <!-- row -->
         <div class="row">
             <header>
-                <h1>Giới thiệu về chúng tôi</h1>
+                <h1>Giới thiệu về Chúng Tôi nè Ku</h1>
             </header>
             <div class="block">
                 <div class="block-top">
